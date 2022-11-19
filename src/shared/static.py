@@ -46,7 +46,7 @@ class Teams(Enum):
 
     @classmethod
     def get_team(cls, name: str) -> Team:
-        return {t.value.name: t for t in cls.__members__.values()}[name]
+        return {t.value.name: t for t in cls.__members__.values()}[name].value
 
 
 class Participants(Enum):

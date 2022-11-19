@@ -1,6 +1,9 @@
 from __future__ import annotations
 from enum import Enum
 from pydantic import BaseModel
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 class Team(BaseModel):

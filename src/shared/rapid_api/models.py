@@ -19,6 +19,8 @@ class Fixture(BaseModel):
     venue_city: str
     venue_name: str
     round: str
+    home_rival: str
+    away_rival: str
 
     @classmethod
     def from_response(cls, response: TotalFixtureResponse) -> Fixture:
@@ -57,3 +59,7 @@ class Fixture(BaseModel):
             away_rival="john",
         )
         return message
+
+    @property
+    def home_and_away_rivals_equal(self) -> bool:
+        return self.home_rival == self.away_rival

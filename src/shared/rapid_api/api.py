@@ -27,8 +27,8 @@ class FootballApi:
     season: int = 2022
 
     headers: Dict[str, str] = {
-        "X-RapidAPI-Key": os.getenv('RAPID_API_KEY'),
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+        "X-RapidAPI-Key": os.getenv("RAPID_API_KEY"),
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
     }
 
     @property
@@ -42,10 +42,6 @@ class FootballApi:
         return params
 
     def get_fixtures(self) -> List[Fixture]:
-        response = requests.get(
-            FIXTURE_URL,
-            params=self.params,
-            headers=self.headers
-        )
+        response = requests.get(FIXTURE_URL, params=self.params, headers=self.headers)
         pprint(response.json())
-        return [Fixture.from_response(f) for f in response.json()['response']]
+        return [Fixture.from_response(f) for f in response.json()["response"]]

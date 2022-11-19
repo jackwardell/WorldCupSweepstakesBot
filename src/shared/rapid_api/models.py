@@ -23,16 +23,16 @@ class Fixture(BaseModel):
     @classmethod
     def from_response(cls, response: TotalFixtureResponse) -> Fixture:
         fixture = cls(
-            home_team=Teams.get_team(response['teams']['home']['name']),
-            away_team=Teams.get_team(response['teams']['away']['name']),
-            home_goals=response['goals']['home'],
-            away_goals=response['goals']['away'],
-            home_winner=response['teams']['home']['winner'],
-            away_winner=response['teams']['away']['winner'],
-            kick_off=datetime.fromisoformat(response['fixture']['date']),
-            venue_city=response['fixture']['venue']['city'],
-            venue_name=response['fixture']['venue']['name'],
-            round=response['league']['round']
+            home_team=Teams.get_team(response["teams"]["home"]["name"]),
+            away_team=Teams.get_team(response["teams"]["away"]["name"]),
+            home_goals=response["goals"]["home"],
+            away_goals=response["goals"]["away"],
+            home_winner=response["teams"]["home"]["winner"],
+            away_winner=response["teams"]["away"]["winner"],
+            kick_off=datetime.fromisoformat(response["fixture"]["date"]),
+            venue_city=response["fixture"]["venue"]["city"],
+            venue_name=response["fixture"]["venue"]["name"],
+            round=response["league"]["round"],
         )
         return fixture
 
@@ -53,7 +53,7 @@ class Fixture(BaseModel):
             venue_city=self.venue_city,
             kick_off=self.kick_off.time(),
             round=self.round,
-            home_rival='jack',
-            away_rival='john',
+            home_rival="jack",
+            away_rival="john",
         )
         return message

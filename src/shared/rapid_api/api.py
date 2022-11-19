@@ -36,8 +36,8 @@ class FootballApi:
         params = {
             "league": self.league_id,
             "season": self.season,
-            "from": str(date.today() + timedelta(days=2)),
-            "to": str(date.today() + timedelta(days=2)),
+            "from": str(date.today()),
+            "to": str(date.today()),
         }
         return params
 

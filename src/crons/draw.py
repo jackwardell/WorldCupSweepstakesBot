@@ -6,7 +6,7 @@ from src.shared.static import Teams
 if __name__ == "__main__":
     all_teams = sorted([t.value for t in Teams.__members__.values()], key=lambda x: x.seed)
     tier_one_teams = all_teams[: len(all_teams) // 2]
-    tier_two_teams = all_teams[len(all_teams) // 2 :]
+    tier_two_teams = all_teams[len(all_teams) // 2:]
 
     random.shuffle(tier_one_teams)
     random.shuffle(tier_two_teams)

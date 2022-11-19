@@ -18,7 +18,7 @@ def get_open_weather_map_api() -> OpenWeatherMapApi:
 
 @attr.s
 class OpenWeatherMapApi:
-    api_key = attr.ib(factory=lambda: get_config().OPEN_WEATHER_MAP_API_KEY)
+    api_key: str = attr.ib(factory=lambda: get_config().OPEN_WEATHER_MAP_API_KEY)
 
     def get_weather_in_peckham(self) -> Weather:
         response = requests.get(

@@ -5,7 +5,6 @@ from typing import List
 
 import attr
 from telegram import Bot
-from telegram import Chat
 
 from src.shared.config import get_config
 from src.shared.telegram_api.models import TelegramUser

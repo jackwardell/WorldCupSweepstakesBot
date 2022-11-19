@@ -24,9 +24,6 @@ class TelegramApi:
     def send_message(self, message: str) -> None:
         self.bot.send_message(self.chat_id, message)
 
-    def _get_chat(self) -> Chat:
-        return self.bot.get_chat(self.chat_id)
-
     def get_users(self) -> List[TelegramUser]:
-        members = self._get_chat().get_administrators()
+        members = self.bot.get_chat(self.chat_id).get_administrators()
         return [TelegramUser.from_telegram(member.user) for member in members]

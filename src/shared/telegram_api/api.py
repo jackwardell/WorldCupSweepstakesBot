@@ -22,8 +22,7 @@ class TelegramApi:
     chat_id: str = attr.ib(factory=lambda: get_config().TELEGRAM_CHAT_ID)
 
     def send_message(self, message: str) -> None:
-        self.bot.send_message(self.chat_id, message)
+        return self.bot.send_message(self.chat_id, message)
 
     def get_users(self) -> List[TelegramUser]:
-        members = self.bot.get_chat(self.chat_id).get_administrators()
-        return [TelegramUser.from_telegram(member.user) for member in members]
+        return [TelegramUser.from_telegram(m.user) for m in self.bot.get_chat(self.chat_id).get_administrators()]

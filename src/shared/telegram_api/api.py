@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import lru_cache
 from telegram.utils.types import FileInput
 from typing import List
-from src.shared.static import PROJECT_ROOT
+from src.shared.config import PROJECT_ROOT
 import attr
 from PIL import Image
 from PIL import ImageDraw
@@ -57,5 +57,5 @@ class TelegramApi:
         return [
             TelegramUser.from_telegram(m.user)
             for m in self.bot.get_chat(self.chat_id).get_administrators()
-            if m.name != BOT_NAME
+            if m.user.first_name != BOT_NAME
         ]

@@ -2,15 +2,22 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 from typing import Optional
-from src.shared.rapid_api.responses import TotalFixtureResponse
+from src.shared.football_api.responses import FixtureResponse
 from datetime import datetime
+from src.shared.football_api.responses import TeamResponse
 
-from src.shared.static import Team, Teams
+
+class FootballTeam(BaseModel):
+    name: str
+
+    @classmethod
+    def from_response(cls, response: TeamResponse) -> FootballTeam:
+        return cls(name=response['team']['name'])
 
 
-class Fixture(BaseModel):
-    home_team: Team
-    away_team: Team
+class FootballFixture(BaseModel):
+    home_team: str
+    away_team: str
     home_goals: Optional[int]
     away_goals: Optional[int]
     home_winner: Optional[bool]
@@ -21,7 +28,7 @@ class Fixture(BaseModel):
     round: str
 
     @classmethod
-    def from_response(cls, response: TotalFixtureResponse) -> Fixture:
+    def from_response(cls, response: FixtureResponse) -> Fixture:
         fixture = cls(
             home_team=Teams.get_team(response["teams"]["home"]["name"]),
             away_team=Teams.get_team(response["teams"]["away"]["name"]),
@@ -63,4 +70,4 @@ class Fixture(BaseModel):
 
     @property
     def home_and_away_rivals_equal(self) -> bool:
-        return self.home_rival == self.away_rival
+        return self.home_team.participant == self.away_team.participant

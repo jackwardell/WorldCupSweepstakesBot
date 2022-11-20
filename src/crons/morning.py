@@ -2,6 +2,7 @@ from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.football_api.api import get_football_api
 from src.shared.telegram_api.api import get_telegram_api
 from src.app.domain import FixtureCollections
+
 MATCHING_RIVALS_COMMENTS = [
     "Wait what...",
     "Umm",

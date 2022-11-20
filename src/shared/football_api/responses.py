@@ -100,4 +100,3 @@ class TeamResponseVenue(TypedDict):
 class TeamResponse(TypedDict):
     team: TeamResponseTeam
     venue: TeamResponseVenue
-

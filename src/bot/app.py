@@ -9,4 +9,3 @@ class BotApp:
     telegram_api: TelegramApi = attr.ib(factory=get_telegram_api)
     football_api: FootballApi = attr.ib(factory=get_football_api)
     get_open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
-

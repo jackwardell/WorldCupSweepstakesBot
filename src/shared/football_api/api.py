@@ -13,6 +13,8 @@ from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
 
 from src.shared.config import get_config
+
+
 @lru_cache
 def get_football_api() -> FootballApi:
     return FootballApi()
@@ -45,19 +47,14 @@ class FootballApi:
                 "from": str(date.today()),
                 "to": str(date.today()),
             },
-            headers=self.headers
+            headers=self.headers,
         )
         return [FootballFixture.from_response(f) for f in response.json()["response"]]
 
     def get_teams(self) -> List[FootballTeam]:
         response = requests.get(
             self.teams_url,
-            params={
-                'league': self.league_id,
-                'season': self.season
-            },
+            params={"league": self.league_id, "season": self.season},
             headers=self.headers,
         )
         return [FootballTeam.from_response(t) for t in response.json()["response"]]
-
-

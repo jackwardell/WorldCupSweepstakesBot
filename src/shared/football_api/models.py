@@ -12,7 +12,7 @@ class FootballTeam(BaseModel):
 
     @classmethod
     def from_response(cls, response: TeamResponse) -> FootballTeam:
-        return cls(name=response['team']['name'])
+        return cls(name=response["team"]["name"])
 
 
 class FootballFixture(BaseModel):

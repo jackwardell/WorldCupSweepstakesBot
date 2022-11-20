@@ -13,7 +13,7 @@ class Participant(BaseModel):
 
     @property
     def tagged_participant(self) -> str:
-        return f'[{self.name}](tg://user?id={self.telegram_id})'
+        return f"[{self.name}](tg://user?id={self.telegram_id})"
 
 
 class Team(BaseModel):
@@ -32,7 +32,7 @@ class TeamResult(BaseModel):
 
     @property
     def won_or_lost(self) -> str:
-        return 'won against' if self.winner else 'lost to'
+        return "won against" if self.winner else "lost to"
 
 
 class Venue(BaseModel):

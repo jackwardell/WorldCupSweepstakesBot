@@ -14,7 +14,7 @@ Base = declarative_base()
 class Participant(Base):
     __tablename__ = "participant"
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True,  nullable=False)
+    id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name: str = Column(String, nullable=False)
     telegram_id: int = Column(Integer, nullable=False)
 
@@ -39,11 +39,11 @@ class Team(Base):
 
 
 class TeamParticipantAssociation(Base):
-    __tablename__ = 'team_participant_association'
+    __tablename__ = "team_participant_association"
 
     id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    team_id = Column(Integer, ForeignKey('team.id'), nullable=False)
-    participant_id = Column(Integer, ForeignKey('participant.id'), nullable=False)
+    team_id = Column(Integer, ForeignKey("team.id"), nullable=False)
+    participant_id = Column(Integer, ForeignKey("participant.id"), nullable=False)
 
     team = relationship("Team", back_populates="participant")
     participant = relationship("Participant", back_populates="team")

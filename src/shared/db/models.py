@@ -26,9 +26,22 @@ class Participant(Base):
 class Team(Base):
     __tablename__ = "team"
 
-    name = Column(String, primary_key=True)
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
     emoji = Column(String)
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> Team:
         return cls(name=football_team.name)
+
+
+class TeamParticipantAssociation(Base):
+    __tablename__ = ''
+
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    team_id = Column(ForeignKey('team.id'))
+    participant_id = Column(ForeignKey('participant.id'))
+
+class Fixture(Base):
+    __tablename__ = 'fixture'
+

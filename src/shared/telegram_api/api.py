@@ -8,7 +8,7 @@ import attr
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-from telegram import Bot
+from telegram import Bot, ParseMode
 
 from src.shared.config import get_config
 from src.shared.telegram_api.models import TelegramUser
@@ -27,9 +27,14 @@ class TelegramApi:
     chat_id: str = attr.ib(factory=lambda: get_config().TELEGRAM_CHAT_ID)
 
     def send_message(self, message: str, reply_to_message_id: int = None) -> int:
-        return self.bot.send_message(
-            self.chat_id, message, reply_to_message_id=reply_to_message_id, parse_mode="Markdown"
-        ).message_id
+        print(message)
+        message = self.bot.send_message(
+            self.chat_id,
+            message,
+            reply_to_message_id=reply_to_message_id,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+        return message.message_id
 
     def send_photo(self, image: FileInput, message: str, reply_to_message_id: int = None) -> int:
         return self.bot.send_photo(self.chat_id, image, message, reply_to_message_id=reply_to_message_id).message_id

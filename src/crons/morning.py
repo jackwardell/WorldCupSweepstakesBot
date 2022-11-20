@@ -1,7 +1,7 @@
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
-from src.shared.rapid_api.api import get_football_api
+from src.shared.football_api.api import get_football_api
 from src.shared.telegram_api.api import get_telegram_api
-
+from src.app.domain import FixtureCollections
 MATCHING_RIVALS_COMMENTS = [
     "Wait what...",
     "Umm",
@@ -16,22 +16,20 @@ if __name__ == "__main__":
     weather_api = get_open_weather_map_api()
 
     weather_emoji = weather_api.get_weather_in_peckham().emoji
-    good_morning_message = f"{weather_emoji} Good Afternoon Friends {weather_emoji}"
-    telegram_api.send_message(good_morning_message)
-    print(good_morning_message)
+    telegram_api.send_message(f"{weather_emoji} Good Afternoon Friends {weather_emoji}")
 
-    fixtures = football_api.get_fixtures()
-    matching_rivals_message_ids = []
+    fixtures = FixtureCollections.from_football_fixtures(football_api.get_fixtures())
+    matching_participants_message_ids = []
 
     if fixtures:
-        starting_message = f"Today there are {len(fixtures)} matches. Here are the fixtures today 👇"
-        telegram_api.send_message(starting_message)
-        print(starting_message)
+        telegram_api.send_message(fixtures.morning_intro_message)
+
         for fixture in fixtures:
-            print(fixture.morning_message)
             message_id = telegram_api.send_message(fixture.morning_message)
-            # if fixture.home_and_away_rivals_equal:
-            #     matching_rivals_message_ids.append((fixture.home_rival, message_id))
+
+            if fixture.home_and_away_rivals_equal:
+                matching_rivals_message_ids.append((fixture.home_rival, message_id))
+
         ending_message = "🍀 Good luck everyone! 🍀"
         telegram_api.send_message(ending_message)
         print(ending_message)

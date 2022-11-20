@@ -16,8 +16,8 @@ class FootballTeam(BaseModel):
 
 
 class FootballFixture(BaseModel):
-    home_team: str
-    away_team: str
+    home_team_name: str
+    away_team_name: str
     home_goals: Optional[int]
     away_goals: Optional[int]
     home_winner: Optional[bool]
@@ -30,8 +30,8 @@ class FootballFixture(BaseModel):
     @classmethod
     def from_response(cls, response: FixtureResponse) -> FootballFixture:
         fixture = cls(
-            home_team=response["teams"]["home"]["name"],
-            away_team=response["teams"]["away"]["name"],
+            home_team_name=response["teams"]["home"]["name"],
+            away_team_name=response["teams"]["away"]["name"],
             home_goals=response["goals"]["home"],
             away_goals=response["goals"]["away"],
             home_winner=response["teams"]["home"]["winner"],

@@ -1,6 +1,6 @@
 from src.shared.football_api.api import get_football_api
 from src.shared.db.api import get_session
-from src.shared.db.models import Participant
+from src.shared.db.models import TeamORM
 
 if __name__ == "__main__":
     football_api = get_football_api()
@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     with get_session() as session:
         for team in teams:
-            participant = Participant.from_telegram_user(user)
+            participant = TeamORM.from_football_team(team)
             session.add(participant)
 
         session.commit()

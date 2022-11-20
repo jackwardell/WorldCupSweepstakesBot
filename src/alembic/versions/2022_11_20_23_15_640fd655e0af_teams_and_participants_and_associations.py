@@ -22,7 +22,7 @@ def upgrade() -> None:
         "participant",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("name", sa.String(), nullable=False),
-        sa.Column("telegram_id", sa.Integer(), nullable=False),
+        sa.Column("telegram_id", sa.BigInteger(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(

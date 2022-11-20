@@ -6,14 +6,20 @@ from datetime import datetime
 from src.shared.emoji import COUNTRIES_AND_FLAGS
 from src.shared.football_api.models import FootballFixture
 
+from src.shared.db.models import ParticipantORM, TeamORM, TeamParticipantAssociationORM
+
 
 class Participant(BaseModel):
     name: str
     telegram_id: int
 
     @property
-    def tagged_participant(self) -> str:
+    def tagged_telegram_participant(self) -> str:
         return f"[{self.name}](tg://user?id={self.telegram_id})"
+
+    @classmethod
+    def from_orm(cls, participant: ParticipantORM) -> Participant:
+        return cls(name=participant.name, telegram_id=participant.telegram_id)
 
 
 class Team(BaseModel):
@@ -22,6 +28,10 @@ class Team(BaseModel):
     @property
     def emoji(self) -> str:
         return COUNTRIES_AND_FLAGS[self.name]
+
+    @classmethod
+    def from_orm(cls, team: TeamORM) -> Team:
+        return cls(name=team.name)
 
 
 class TeamResult(BaseModel):

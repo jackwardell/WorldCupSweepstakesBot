@@ -14,9 +14,11 @@ Base = declarative_base()
 class Participant(Base):
     __tablename__ = "participant"
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True)
-    name: str = Column(String)
-    telegram_id: int = Column(Integer)
+    id: int = Column(Integer, primary_key=True, autoincrement=True,  nullable=False)
+    name: str = Column(String, nullable=False)
+    telegram_id: int = Column(Integer, nullable=False)
+
+    team = relationship("TeamParticipantAssociation", back_populates="team")
 
     @classmethod
     def from_telegram_user(cls, telegram_user: TelegramUser) -> Participant:
@@ -26,9 +28,10 @@ class Participant(Base):
 class Team(Base):
     __tablename__ = "team"
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
-    emoji = Column(String)
+    id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    name = Column(String, nullable=False)
+
+    participant = relationship("TeamParticipantAssociation", back_populates="participant")
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> Team:
@@ -36,12 +39,11 @@ class Team(Base):
 
 
 class TeamParticipantAssociation(Base):
-    __tablename__ = ''
+    __tablename__ = 'team_participant_association'
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True)
-    team_id = Column(ForeignKey('team.id'))
-    participant_id = Column(ForeignKey('participant.id'))
+    id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    team_id = Column(Integer, ForeignKey('team.id'), nullable=False)
+    participant_id = Column(Integer, ForeignKey('participant.id'), nullable=False)
 
-class Fixture(Base):
-    __tablename__ = 'fixture'
-
+    team = relationship("Team", back_populates="participant")
+    participant = relationship("Participant", back_populates="team")

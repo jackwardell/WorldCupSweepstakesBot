@@ -6,6 +6,8 @@ from sqlalchemy import String
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from src.shared.telegram_api.models import TelegramUser
+from src.shared.football_api.models import FootballTeam
+
 Base = declarative_base()
 
 
@@ -27,8 +29,6 @@ class Team(Base):
     name = Column(String, primary_key=True)
     emoji = Column(String)
 
-
-# class ParticipantTeamAssociation(Base):
-#     __tablename__ = "participant_team_association"
-#
-#     team_name =
+    @classmethod
+    def from_football_team(cls, football_team: FootballTeam) -> Team:
+        return cls(name=football_team.name)

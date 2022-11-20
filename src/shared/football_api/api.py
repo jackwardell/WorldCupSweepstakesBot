@@ -2,20 +2,17 @@ from __future__ import annotations
 
 import os
 from datetime import date
-from datetime import timedelta
 from functools import lru_cache
-from pprint import pprint
 from typing import Dict
 from typing import List
-
+from pprint import pprint
 import attr
 import requests
 
-from src.shared.rapid_api.models import Fixture
+from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballTeam
 
-FIXTURE_URL = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-
-
+from src.shared.config import get_config
 @lru_cache
 def get_football_api() -> FootballApi:
     return FootballApi()
@@ -27,21 +24,40 @@ class FootballApi:
     season: int = 2022
 
     headers: Dict[str, str] = {
-        "X-RapidAPI-Key": os.getenv("RAPID_API_KEY"),
+        "X-RapidAPI-Key": get_config().RAPID_API_KEY,
         "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
     }
 
     @property
-    def params(self) -> Dict[str, str]:
-        params = {
-            "league": self.league_id,
-            "season": self.season,
-            "from": str(date.today()),
-            "to": str(date.today()),
-        }
-        return params
+    def fixtures_url(self) -> str:
+        return "https://api-football-v1.p.rapidapi.com/v3/fixtures"
 
-    def get_fixtures(self) -> List[Fixture]:
-        response = requests.get(FIXTURE_URL, params=self.params, headers=self.headers)
-        pprint(response.json())
-        return [Fixture.from_response(f) for f in response.json()["response"]]
+    @property
+    def teams_url(self) -> str:
+        return "https://api-football-v1.p.rapidapi.com/v3/teams"
+
+    def get_fixtures(self) -> List[FootballFixture]:
+        response = requests.get(
+            self.fixtures_url,
+            params={
+                "league": self.league_id,
+                "season": self.season,
+                "from": str(date.today()),
+                "to": str(date.today()),
+            },
+            headers=self.headers
+        )
+        return [FootballFixture.from_response(f) for f in response.json()["response"]]
+
+    def get_teams(self) -> List[FootballTeam]:
+        response = requests.get(
+            self.teams_url,
+            params={
+                'league': self.league_id,
+                'season': self.season
+            },
+            headers=self.headers,
+        )
+        return [FootballTeam.from_response(t) for t in response.json()["response"]]
+
+

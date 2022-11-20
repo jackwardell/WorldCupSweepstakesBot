@@ -68,4 +68,4 @@ class Weather(BaseModel):
 
     @classmethod
     def from_response(cls, response: WeatherResponse) -> Weather:
-        return cls(emoji=WEATHER_ID_TO_EMOJI[response['weather'][0]['id']])
+        return cls(emoji=WEATHER_ID_TO_EMOJI[response["weather"][0]["id"]])

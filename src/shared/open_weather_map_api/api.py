@@ -21,11 +21,5 @@ class OpenWeatherMapApi:
     api_key: str = attr.ib(factory=lambda: get_config().OPEN_WEATHER_MAP_API_KEY)
 
     def get_weather_in_peckham(self) -> Weather:
-        response = requests.get(
-            WEATHER_URL,
-            params={
-                "q": "Peckham",
-                "appid": self.api_key
-            }
-        )
+        response = requests.get(WEATHER_URL, params={"q": "Peckham", "appid": self.api_key})
         return Weather.from_response(response.json())

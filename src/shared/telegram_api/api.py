@@ -13,6 +13,8 @@ from telegram import Bot
 from src.shared.config import get_config
 from src.shared.telegram_api.models import TelegramUser
 
+BOT_NAME = "WorldCupBot2022"
+
 
 @lru_cache
 def get_telegram_api() -> TelegramApi:
@@ -25,10 +27,15 @@ class TelegramApi:
     chat_id: str = attr.ib(factory=lambda: get_config().TELEGRAM_CHAT_ID)
 
     def send_message(self, message: str, reply_to_message_id: int = None) -> int:
-        return self.bot.send_message(self.chat_id, message, reply_to_message_id=reply_to_message_id).message_id
+        return self.bot.send_message(
+            self.chat_id, message, reply_to_message_id=reply_to_message_id, parse_mode="Markdown"
+        ).message_id
 
     def send_photo(self, image: FileInput, message: str, reply_to_message_id: int = None) -> int:
         return self.bot.send_photo(self.chat_id, image, message, reply_to_message_id=reply_to_message_id).message_id
+
+    def pin_message(self, message_id: int) -> bool:
+        return self.bot.pin_chat_message(self.chat_id, message_id)
 
     def send_spider_man_image(self, participant_name: str) -> int:
         image_name = f"spiderman-{participant_name}.jpg"
@@ -47,4 +54,8 @@ class TelegramApi:
             return self.send_photo(jpg, "🤔")
 
     def get_users(self) -> List[TelegramUser]:
-        return [TelegramUser.from_telegram(m.user) for m in self.bot.get_chat(self.chat_id).get_administrators()]
+        return [
+            TelegramUser.from_telegram(m.user)
+            for m in self.bot.get_chat(self.chat_id).get_administrators()
+            if m.name != BOT_NAME
+        ]

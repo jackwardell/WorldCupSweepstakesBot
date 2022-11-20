@@ -19,8 +19,6 @@ class Fixture(BaseModel):
     venue_city: str
     venue_name: str
     round: str
-    home_rival: str
-    away_rival: str
 
     @classmethod
     def from_response(cls, response: TotalFixtureResponse) -> Fixture:
@@ -45,7 +43,8 @@ class Fixture(BaseModel):
             "🏟️Stadium: {venue_name} in {venue_city} 🧑‍🤝‍🧑\n"
             "🦵 Kick Off: {kick_off} today ⏱️\n"
             "🔢 Round: {round} 💫\n"
-            "⚔️ Rivals: {home_rival} vs. {away_rival} 😈"
+            "⚔️ Rivals: [{home_rival_name}](tg://user?id={home_rival_telegram_id}) "
+            "vs. [{away_rival_name}](tg://user?id={away_rival_telegram_id}) 😈"
         ).format(
             home_team_name=self.home_team.name,
             home_team_emoji=self.home_team.emoji,
@@ -55,8 +54,10 @@ class Fixture(BaseModel):
             venue_city=self.venue_city,
             kick_off=self.kick_off.time(),
             round=self.round,
-            home_rival="jack",
-            away_rival="john",
+            home_rival_name=self.home_team.participant.display_name,
+            away_rival_name=self.away_team.participant.display_name,
+            home_rival_telegram_id=self.home_team.participant.telegram_id,
+            away_rival_telegram_id=self.away_team.participant.telegram_id,
         )
         return message
 

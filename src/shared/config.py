@@ -10,6 +10,8 @@ class Config(BaseSettings):
     TELEGRAM_CHAT_ID: str
     TELEGRAM_API_KEY: str
     OPEN_WEATHER_MAP_API_KEY: str
+    FERNET_ENCRYPTION_KEY: str
+    SQLALCHEMY_URL: str
 
 
 @lru_cache

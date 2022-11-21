@@ -47,7 +47,8 @@ if __name__ == "__main__":
         for team, participant in DRAW.items():
             session.add(
                 TeamParticipantAssociationORM(
-                    team_name=team, participant_name=participant
+                    team_name=team,
+                    participant_name=participant,
                 )
             )
         session.commit()

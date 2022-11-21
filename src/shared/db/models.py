@@ -1,14 +1,19 @@
 from __future__ import annotations
+
+from datetime import datetime
+
+from sqlalchemy import BigInteger
+from sqlalchemy import Boolean
 from sqlalchemy import Column
+from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
-from sqlalchemy import Integer, BigInteger
-from sqlalchemy import String, Boolean, DateTime
+from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
-from src.shared.telegram_api.models import TelegramUser
-from src.shared.football_api.models import FootballTeam
-from datetime import datetime
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballTeam
+from src.shared.telegram_api.models import TelegramUser
 
 Base = declarative_base()
 

@@ -10,7 +10,12 @@ def response() -> Dict[str, Any]:
         "errors": [],
         "get": "fixtures",
         "paging": {"current": 1, "total": 1},
-        "parameters": {"from": "2022-11-20", "league": "1", "season": "2022", "to": "2022-11-20"},
+        "parameters": {
+            "from": "2022-11-20",
+            "league": "1",
+            "season": "2022",
+            "to": "2022-11-20",
+        },
         "response": [
             {
                 "fixture": {

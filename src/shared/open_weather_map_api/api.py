@@ -4,7 +4,6 @@ from functools import lru_cache
 
 import attr
 import requests
-
 from src.shared.config import get_config
 from src.shared.open_weather_map_api.domain import Weather
 

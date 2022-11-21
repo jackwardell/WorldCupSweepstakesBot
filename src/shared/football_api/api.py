@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-import os
 from datetime import date
 from functools import lru_cache
 from typing import Dict
 from typing import List
-from pprint import pprint
+
 import attr
 import requests
-
+from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
-
-from src.shared.config import get_config
 
 
 @lru_cache

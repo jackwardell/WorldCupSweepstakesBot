@@ -1,17 +1,18 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from telegram.utils.types import FileInput
 from typing import List
-from src.shared.config import PROJECT_ROOT
+
 import attr
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-from telegram import Bot, ParseMode
-
 from src.shared.config import get_config
+from src.shared.config import PROJECT_ROOT
 from src.shared.telegram_api.models import TelegramUser
+from telegram import Bot
+from telegram import ParseMode
+from telegram.utils.types import FileInput
 
 BOT_NAME = "WorldCupBot2022"
 

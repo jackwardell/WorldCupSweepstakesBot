@@ -1,5 +1,5 @@
-from src.shared.db.api import get_session
 from src.shared.bot.api import get_bot_api
+from src.shared.db.api import get_session
 from src.shared.db.models import TeamAndParticipantORM
 
 DRAW = {

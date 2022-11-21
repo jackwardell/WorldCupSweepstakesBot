@@ -1,20 +1,26 @@
 from __future__ import annotations
-from typing import List, Dict
-from datetime import date, timedelta, datetime
+
+from datetime import datetime
+from functools import lru_cache
+from typing import List
+
 import attr
+from sqlalchemy import func
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, func
-from src.shared.bot.models import Participant, Team, Fixture
+from src.shared.bot.models import Fixture
+from src.shared.bot.models import Participant
+from src.shared.bot.models import Team
 from src.shared.db.api import get_session
-from src.shared.db.models import ParticipantORM, TeamORM, FixtureORM, TeamAndParticipantORM
+from src.shared.db.models import FixtureORM
+from src.shared.db.models import ParticipantORM
+from src.shared.db.models import TeamORM
 from src.shared.football_api.api import FootballApi
 from src.shared.football_api.api import get_football_api
-from src.shared.open_weather_map_api.api import OpenWeatherMapApi
-from src.shared.open_weather_map_api.api import get_open_weather_map_api
-from src.shared.telegram_api.api import TelegramApi
 from src.shared.telegram_api.api import get_telegram_api
+from src.shared.telegram_api.api import TelegramApi
 
-from functools import lru_cache
+# from src.shared.open_weather_map_api.api import (OpenWeatherMapApi,
+#                                                  get_open_weather_map_api)
 
 
 @lru_cache
@@ -26,7 +32,7 @@ def get_bot_api() -> BotApi:
 class BotApi:
     telegram_api: TelegramApi = attr.ib(factory=get_telegram_api)
     football_api: FootballApi = attr.ib(factory=get_football_api)
-    get_open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
+    # get_open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
     session: Session = attr.ib(factory=get_session)
 
     def get_participants(self) -> List[Participant]:

@@ -1,4 +1,5 @@
-from typing import TypedDict, List
+from typing import List
+from typing import TypedDict
 
 
 class WeatherCoodResponse(TypedDict):

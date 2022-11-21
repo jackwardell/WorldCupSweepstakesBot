@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pydantic import BaseModel
-
 from src.shared.open_weather_map_api.responses import WeatherResponse
 
 WEATHER_ID_TO_EMOJI = {

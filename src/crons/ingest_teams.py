@@ -1,6 +1,6 @@
-from src.shared.football_api.api import get_football_api
 from src.shared.db.api import get_session
 from src.shared.db.models import TeamORM
+from src.shared.football_api.api import get_football_api
 
 if __name__ == "__main__":
     football_api = get_football_api()

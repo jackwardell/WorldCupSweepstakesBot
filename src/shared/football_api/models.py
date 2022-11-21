@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
-from typing import Optional
-from src.shared.football_api.responses import FixtureResponse
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel
+from src.shared.football_api.responses import FixtureResponse
 from src.shared.football_api.responses import TeamResponse
 
 

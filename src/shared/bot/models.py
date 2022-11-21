@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
-from typing import Optional, List
 from datetime import datetime
+from typing import List
+from typing import Optional
+
+from pydantic import BaseModel
+from src.shared.db.models import FixtureORM
+from src.shared.db.models import ParticipantORM
+from src.shared.db.models import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
 from src.shared.football_api.models import FootballFixture
-
-from src.shared.db.models import ParticipantORM, TeamORM, TeamAndParticipantORM, FixtureORM
 
 
 class Participant(BaseModel):
@@ -92,7 +95,8 @@ class Fixture(BaseModel):
     @property
     def morning_message(self) -> str:
         message = (
-            "🤝 Teams: {home_team_name} {home_team_emoji} play {away_team_name} {away_team_emoji}\n"
+            "🤝 Teams: {home_team_name} {home_team_emoji} "
+            "play {away_team_name} {away_team_emoji}\n"
             "🏟️ Stadium: {venue_name} in {venue_city} 🧑‍🤝‍🧑\n"
             "🦵 Kick Off: {kick_off} today ⏱️\n"
             "🔢 Round: {round} 💫\n"
@@ -132,6 +136,6 @@ class FixtureCollections(BaseModel):
     @property
     def morning_intro_message(self) -> str:
         if len(self.fixtures) == 1:
-            return f"Today there is 1 match. Here is the fixture 👇"
+            return "Today there is 1 match. Here is the fixture 👇"
         else:
             return f"Today there are {len(self.fixtures)} matches. Here are the fixtures 👇"

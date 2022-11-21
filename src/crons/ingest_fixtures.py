@@ -1,8 +1,7 @@
-from src.shared.football_api.api import get_football_api
+from sqlalchemy.orm.exc import NoResultFound
 from src.shared.db.api import get_session
 from src.shared.db.models import FixtureORM
-from sqlalchemy.orm.exc import NoResultFound
-from datetime import datetime
+from src.shared.football_api.api import get_football_api
 
 if __name__ == "__main__":
     bot_api = get_football_api()

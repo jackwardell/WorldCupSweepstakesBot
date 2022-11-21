@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     if fixtures:
         if len(fixtures) == 1:
-            starting_message = f"Today there is one match. Here's the fixture 👇"
+            starting_message = "Today there is one match. Here's the fixture 👇"
         else:
             starting_message = f"Today there {len(fixtures)} matches. Here are the fixtures today 👇"
         print(starting_message)

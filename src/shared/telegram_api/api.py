@@ -4,9 +4,6 @@ from functools import lru_cache
 from typing import List
 
 import attr
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
 from src.shared.config import get_config
 from src.shared.config import PROJECT_ROOT
 from src.shared.telegram_api.models import TelegramUser
@@ -43,21 +40,10 @@ class TelegramApi:
     def pin_message(self, message_id: int) -> bool:
         return self.bot.pin_chat_message(self.chat_id, message_id)
 
-    def send_spider_man_image(self, participant_name: str) -> int:
-        image_name = f"spiderman-{participant_name}.jpg"
-        image_path = PROJECT_ROOT / "assets" / image_name
-        if image_path.exists():
-            return image_path
-        else:
-            spiderman_image = Image.open(str(image_path / "assets/spiderman.jpg"))
-            draw = ImageDraw.Draw(spiderman_image)
-            font = ImageFont.truetype(str(image_path / "assets/OpenSans-Bold.ttf"), 64)
-            draw.text((100, 175), participant_name, (0, 0, 0), font=font)
-            draw.text((520, 225), participant_name, (0, 0, 0), font=font)
-            spiderman_image.save(str(image_path))
-
+    def send_spiderman_image(self, participant_name: str, reply_to_message_id: int = None) -> int:
+        image_path = PROJECT_ROOT / "src" / "assets" / "rendered_assets" / f"spiderman-{participant_name}.jpg"
         with open(image_path, "rb") as jpg:
-            return self.send_photo(jpg, "🤔")
+            return self.send_photo(jpg, "🤔", reply_to_message_id=reply_to_message_id)
 
     def get_users(self) -> List[TelegramUser]:
         return [

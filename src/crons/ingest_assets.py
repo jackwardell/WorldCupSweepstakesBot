@@ -1,19 +1,30 @@
-# from __future__ import annotations
-#
-# from functools import lru_cache
-# from typing import List
-#
-# import attr
-# from PIL import Image
-# from PIL import ImageDraw
-# from PIL import ImageFont
-# from src.shared.config import get_config
-# from src.shared.config import PROJECT_ROOT
-# from src.shared.db.api import get_session
-# from src.shared.telegram_api.models import TelegramUser
-# from telegram import Bot
-# from telegram import ParseMode
-# from telegram.utils.types import FileInput
-#
-# if __name__ == "__main__":
-#     image_path = PROJECT_ROOT / "assets" / image_name
+from __future__ import annotations
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+from src.shared.bot.api import get_bot_api
+from src.shared.config import PROJECT_ROOT
+
+ASSET_FOLDER = PROJECT_ROOT / "src" / "assets"
+
+
+def main() -> None:
+    bot_api = get_bot_api()
+
+    for participant in bot_api.get_participants():
+        image_name = f"spiderman-{participant.name}.jpg"
+        image_path = ASSET_FOLDER / "rendered_assets" / image_name
+        if image_path.exists():
+            return
+        else:
+            spiderman_image = Image.open(str(ASSET_FOLDER / "spiderman.jpg"))
+            draw = ImageDraw.Draw(spiderman_image)
+            font = ImageFont.truetype(str(ASSET_FOLDER / "OpenSans-Bold.ttf"), 64)
+            draw.text((100, 175), participant.name, (0, 0, 0), font=font)
+            draw.text((520, 225), participant.name, (0, 0, 0), font=font)
+            spiderman_image.save(str(image_path))
+
+
+if __name__ == "__main__":
+    main()

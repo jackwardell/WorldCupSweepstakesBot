@@ -17,6 +17,7 @@ class FootballTeam(BaseModel):
 
 
 class FootballFixture(BaseModel):
+    football_api_id: str
     home_team_name: str
     away_team_name: str
     home_team_goals: Optional[int]
@@ -31,6 +32,7 @@ class FootballFixture(BaseModel):
     @classmethod
     def from_response(cls, response: FixtureResponse) -> FootballFixture:
         fixture = cls(
+            football_api_id=response["fixture"]["id"],
             home_team_name=response["teams"]["home"]["name"],
             away_team_name=response["teams"]["away"]["name"],
             home_team_goals=response["goals"]["home"],

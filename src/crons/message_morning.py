@@ -3,6 +3,10 @@ from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.telegram_api.api import get_telegram_api
 
 
+def main() -> None:
+    pass
+
+
 if __name__ == "__main__":
 
     telegram_api = get_telegram_api()

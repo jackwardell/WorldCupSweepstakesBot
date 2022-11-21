@@ -62,6 +62,7 @@ class FixtureORM(Base):
     __tablename__ = "fixture"
 
     id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    football_api_id: str = Column(String, nullable=False)
     home_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
     away_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
     home_team_goals: int = Column(Integer, nullable=True)

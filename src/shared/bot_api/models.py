@@ -9,7 +9,6 @@ from src.shared.db_api.models import FixtureORM
 from src.shared.db_api.models import ParticipantORM
 from src.shared.db_api.models import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
-from src.shared.football_api.models import FootballFixture
 
 
 class Participant(BaseModel):
@@ -38,6 +37,8 @@ class Team(BaseModel):
 
 
 class Fixture(BaseModel):
+    id: int
+    football_api_id: str
     home_team: Team
     away_team: Team
     home_participant: Participant
@@ -126,16 +127,19 @@ class Fixture(BaseModel):
         return message
 
 
-class FixtureCollections(BaseModel):
+class FixtureCollection(BaseModel):
     fixtures: List[Fixture]
 
     @classmethod
-    def from_football_fixtures(cls, football_fixtures: List[FootballFixture]) -> FixtureCollections:
-        return cls(fixtures=[Fixture.from_football_fixture(f) for f in football_fixtures])
+    def from_fixtures(cls, fixtures: List[FixtureORM]) -> FixtureCollection:
+        return cls(fixtures=[Fixture.from_orm(f) for f in fixtures])
 
     @property
-    def morning_intro_message(self) -> str:
-        if len(self.fixtures) == 1:
-            return "Today there is 1 match. Here is the fixture 👇"
+    def fixture_message(self) -> str:
+        if len(self.fixtures) == 0:
+            fixture_message = "No fixtures today, just chill the fuck out 🍻"
+        elif len(self.fixtures) == 1:
+            fixture_message = "Today there is one match. Here's the fixture 👇"
         else:
-            return f"Today there are {len(self.fixtures)} matches. Here are the fixtures 👇"
+            fixture_message = f"Today there {len(self.fixtures)} matches. Here are the fixtures 👇"
+        return fixture_message

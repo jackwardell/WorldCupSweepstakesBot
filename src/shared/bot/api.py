@@ -1,12 +1,12 @@
 from __future__ import annotations
-from typing import List
-
+from typing import List, Dict
+from datetime import date, timedelta, datetime
 import attr
 from sqlalchemy.orm import Session
-
+from sqlalchemy import and_, func
 from src.shared.bot.models import Participant, Team, Fixture
 from src.shared.db.api import get_session
-from src.shared.db.models import ParticipantORM, TeamORM
+from src.shared.db.models import ParticipantORM, TeamORM, FixtureORM, TeamAndParticipantORM
 from src.shared.football_api.api import FootballApi
 from src.shared.football_api.api import get_football_api
 from src.shared.open_weather_map_api.api import OpenWeatherMapApi
@@ -37,5 +37,14 @@ class BotApi:
         with self.session as session:
             return [Team.from_orm(t) for t in session.query(TeamORM).all()]
 
-    def get_fixtures(self) -> List[Fixture]:
-        return [Fixture.from_football_fixture(f) for f in self.football_api.get_fixtures()]
+    def get_fixtures(self, today: bool = True) -> List[Fixture]:
+        with self.session as session:
+            if today:
+                query = session.query(FixtureORM).filter(
+                    func.extract('month', FixtureORM.kick_off) == datetime.today().month,
+                    func.extract('year', FixtureORM.kick_off) == datetime.today().year,
+                    func.extract('day', FixtureORM.kick_off) == datetime.today().day
+                ).order_by(FixtureORM.kick_off)
+            else:
+                query = session.query(FixtureORM)
+            return [Fixture.from_orm(f) for f in query.order_by(FixtureORM.kick_off).all()]

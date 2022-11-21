@@ -28,13 +28,13 @@ class TelegramApi:
 
     def send_message(self, message: str, reply_to_message_id: int = None) -> int:
         print(message)
-        # message = self.bot.send_message(
-        #     self.chat_id,
-        #     message,
-        #     reply_to_message_id=reply_to_message_id,
-        #     parse_mode=ParseMode.MARKDOWN,
-        # )
-        # return message.message_id
+        message = self.bot.send_message(
+            self.chat_id,
+            message,
+            reply_to_message_id=reply_to_message_id,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+        return message.message_id
 
     def send_photo(self, image: FileInput, message: str, reply_to_message_id: int = None) -> int:
         return self.bot.send_photo(self.chat_id, image, message, reply_to_message_id=reply_to_message_id).message_id

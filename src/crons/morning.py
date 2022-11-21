@@ -1,5 +1,5 @@
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
-from src.shared.football_api.api import get_football_api
+from src.shared.bot.api import get_bot_api
 from src.shared.telegram_api.api import get_telegram_api
 from src.shared.bot.models import FixtureCollections
 
@@ -12,18 +12,17 @@ MATCHING_RIVALS_COMMENTS = [
 
 if __name__ == "__main__":
 
-    football_api = get_football_api()
     telegram_api = get_telegram_api()
     weather_api = get_open_weather_map_api()
 
     weather_emoji = weather_api.get_weather_in_peckham().emoji
-    telegram_api.send_message(f"{weather_emoji} Good Afternoon Friends {weather_emoji}")
+    telegram_api.send_message(f"{weather_emoji} Good Morning Friends {weather_emoji}")
 
-    fixtures = FixtureCollections.from_football_fixtures(football_api.get_fixtures())
+    fixtures = get_bot_api().get_fixtures()
     # matching_participants_message_ids = []
 
     if fixtures:
-        telegram_api.send_message(fixtures.morning_intro_message)
+        # telegram_api.send_message(fixtures.morning_intro_message)
 
         for fixture in fixtures:
             message_id = telegram_api.send_message(fixture.morning_message)
@@ -33,7 +32,6 @@ if __name__ == "__main__":
 
         ending_message = "🍀 Good luck everyone! 🍀"
         telegram_api.send_message(ending_message)
-        print(ending_message)
 
         # if matching_rivals_message_ids:
         #     for c, (participant, matching_rivals_message_id) in enumerate(matching_rivals_message_ids):

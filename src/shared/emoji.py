@@ -232,7 +232,7 @@ COUNTRIES_AND_FLAGS = {
     "Ukraine": "🇺🇦",
     "Uganda": "🇺🇬",
     "United States Minor Outlying Islands": "🇺🇲",
-    "United States": "🇺🇸",
+    "USA": "🇺🇸",
     "Uruguay": "🇺🇾",
     "Uzbekistan": "🇺🇿",
     "Vatican City": "🇻🇦",

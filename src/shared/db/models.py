@@ -18,7 +18,7 @@ class ParticipantORM(Base):
     name: str = Column(String, primary_key=True, nullable=False)
     telegram_id: int = Column(BigInteger, nullable=False)
 
-    team: TeamORM = relationship("TeamParticipantAssociationORM", back_populates="participant")
+    team: TeamORM = relationship("TeamAndParticipantORM", back_populates="participant", uselist=False)
 
     @classmethod
     def from_telegram_user(cls, telegram_user: TelegramUser) -> ParticipantORM:
@@ -30,22 +30,22 @@ class TeamORM(Base):
 
     name: str = Column(String, primary_key=True, nullable=False)
 
-    participant: ParticipantORM = relationship("TeamParticipantAssociationORM", back_populates="team")
+    participant: ParticipantORM = relationship("TeamAndParticipantORM", back_populates="team", uselist=False)
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> TeamORM:
         return cls(name=football_team.name)
 
 
-class TeamParticipantAssociationORM(Base):
-    __tablename__ = "team_participant_association"
+class TeamAndParticipantORM(Base):
+    __tablename__ = "team_and_participant"
 
     id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
     participant_name: str = Column(String, ForeignKey("participant.name"), nullable=False)
 
-    team: TeamORM = relationship("TeamORM", back_populates="participant")
-    participant: ParticipantORM = relationship("ParticipantORM", back_populates="team")
+    team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
+    participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
 
 
 class FixtureORM(Base):

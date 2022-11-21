@@ -1,6 +1,6 @@
 from src.shared.db.api import get_session
 from src.shared.bot.api import get_bot_api
-from src.shared.db.models import TeamParticipantAssociationORM
+from src.shared.db.models import TeamAndParticipantORM
 
 DRAW = {
     "Argentina": "Paddy",
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     with get_session() as session:
         for team, participant in DRAW.items():
             session.add(
-                TeamParticipantAssociationORM(
+                TeamAndParticipantORM(
                     team_name=team,
                     participant_name=participant,
                 )

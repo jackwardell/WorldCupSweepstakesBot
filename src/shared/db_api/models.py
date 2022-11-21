@@ -9,6 +9,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from src.shared.football_api.models import FootballFixture
@@ -52,6 +53,8 @@ class TeamAndParticipantORM(Base):
 
     team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
     participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
+
+    __table_args__ = (UniqueConstraint("team_name", "participant_name", name="one_team_per_person"),)
 
     @classmethod
     def from_team_name_and_participant_name(cls, team_name: str, participant_name: str) -> TeamORM:

@@ -10,10 +10,10 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 from src.shared.config import get_config
-from src.shared.db.models import FixtureORM
-from src.shared.db.models import ParticipantORM
-from src.shared.db.models import TeamAndParticipantORM
-from src.shared.db.models import TeamORM
+from src.shared.db_api.models import FixtureORM
+from src.shared.db_api.models import ParticipantORM
+from src.shared.db_api.models import TeamAndParticipantORM
+from src.shared.db_api.models import TeamORM
 from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
 from src.shared.telegram_api.models import TelegramUser

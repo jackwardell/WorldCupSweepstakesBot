@@ -5,9 +5,9 @@ from typing import List
 from typing import Optional
 
 from pydantic import BaseModel
-from src.shared.db.models import FixtureORM
-from src.shared.db.models import ParticipantORM
-from src.shared.db.models import TeamORM
+from src.shared.db_api.models import FixtureORM
+from src.shared.db_api.models import ParticipantORM
+from src.shared.db_api.models import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
 from src.shared.football_api.models import FootballFixture
 

@@ -1,4 +1,4 @@
-from src.shared.db.api import get_db_api
+from src.shared.db_api.api import get_db_api
 from src.shared.telegram_api.api import get_telegram_api
 
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-from src.shared.bot.api import get_bot_api
+from src.shared.bot_api.api import get_bot_api
 from src.shared.config import PROJECT_ROOT
 
 ASSET_FOLDER = PROJECT_ROOT / "src" / "assets"

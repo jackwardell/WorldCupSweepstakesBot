@@ -1,4 +1,4 @@
-from src.shared.bot.api import get_bot_api
+from src.shared.bot_api.api import get_bot_api
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.telegram_api.api import get_telegram_api
 

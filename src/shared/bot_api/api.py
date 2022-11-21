@@ -4,9 +4,9 @@ from functools import lru_cache
 from typing import List
 
 import attr
-from src.shared.bot.models import Participant
-from src.shared.db.api import DbApi
-from src.shared.db.api import get_db_api
+from src.shared.bot_api.models import Participant
+from src.shared.db_api.api import DbApi
+from src.shared.db_api.api import get_db_api
 
 
 @lru_cache

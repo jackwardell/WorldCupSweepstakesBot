@@ -1,3 +1,4 @@
+from src.shared.db_api.api import DbApiError
 from src.shared.db_api.api import get_db_api
 
 DRAW = {
@@ -40,7 +41,10 @@ def main() -> None:
     db_api = get_db_api()
 
     for team_name, participant_name in DRAW.items():
-        db_api.save_team_and_participant(team_name, participant_name)
+        try:
+            db_api.save_team_and_participant(team_name, participant_name)
+        except DbApiError:
+            pass
 
 
 if __name__ == "__main__":

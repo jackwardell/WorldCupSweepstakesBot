@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     with get_session() as session:
         for football_fixture in football_fixtures:
-            participant = FixtureORM.from_telegram_user(user)
-            session.add(participant)
+            fixture = FixtureORM.from_football_fixture(football_fixture)
+            session.add(fixture)
 
         session.commit()

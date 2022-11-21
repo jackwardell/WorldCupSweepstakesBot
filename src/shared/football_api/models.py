@@ -18,10 +18,10 @@ class FootballTeam(BaseModel):
 class FootballFixture(BaseModel):
     home_team_name: str
     away_team_name: str
-    home_goals: Optional[int]
-    away_goals: Optional[int]
-    home_winner: Optional[bool]
-    away_winner: Optional[bool]
+    home_team_goals: Optional[int]
+    away_team_goals: Optional[int]
+    home_team_winner: Optional[bool]
+    away_team_winner: Optional[bool]
     kick_off: datetime
     venue_city: str
     venue_name: str
@@ -32,10 +32,10 @@ class FootballFixture(BaseModel):
         fixture = cls(
             home_team_name=response["teams"]["home"]["name"],
             away_team_name=response["teams"]["away"]["name"],
-            home_goals=response["goals"]["home"],
-            away_goals=response["goals"]["away"],
-            home_winner=response["teams"]["home"]["winner"],
-            away_winner=response["teams"]["away"]["winner"],
+            home_team_goals=response["goals"]["home"],
+            away_team_goals=response["goals"]["away"],
+            home_team_winner=response["teams"]["home"]["winner"],
+            away_team_winner=response["teams"]["away"]["winner"],
             kick_off=datetime.fromisoformat(response["fixture"]["date"]),
             venue_city=response["fixture"]["venue"]["city"],
             venue_name=response["fixture"]["venue"]["name"],

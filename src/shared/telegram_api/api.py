@@ -46,8 +46,5 @@ class TelegramApi:
             return self.send_photo(jpg, "🤔", reply_to_message_id=reply_to_message_id)
 
     def get_users(self) -> List[TelegramUser]:
-        return [
-            TelegramUser.from_telegram(m.user)
-            for m in self.bot.get_chat(self.chat_id).get_administrators()
-            if m.user.first_name != BOT_NAME
-        ]
+        administrators = self.bot.get_chat(self.chat_id).get_administrators()
+        return [TelegramUser.from_telegram(a.user) for a in administrators if a.user.first_name != BOT_NAME]

@@ -9,6 +9,7 @@ from src.shared.telegram_api.models import TelegramUser
 from src.shared.football_api.models import FootballTeam
 from datetime import datetime
 from src.shared.football_api.models import FootballFixture
+
 Base = declarative_base()
 
 

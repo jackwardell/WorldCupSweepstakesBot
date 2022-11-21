@@ -107,7 +107,7 @@ class Fixture(BaseModel):
             kick_off=self.kick_off,
             round=self.round,
             home_participant_tag=self.home_participant.tagged_telegram_participant,
-            away_participant_tag=self.away_participant.tagged_telegram_participant
+            away_participant_tag=self.away_participant.tagged_telegram_participant,
         )
         return message
 

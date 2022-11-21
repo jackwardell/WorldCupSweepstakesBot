@@ -44,8 +44,8 @@ class FootballApi:
             "season": self.season,
         }
         if today_only:
-            params['from'] = str(date.today())
-            params['to'] = str(date.today())
+            params["from"] = str(date.today())
+            params["to"] = str(date.today())
         response = requests.get(
             self.fixtures_url,
             params=params,

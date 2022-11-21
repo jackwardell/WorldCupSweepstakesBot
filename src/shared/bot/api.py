@@ -40,11 +40,15 @@ class BotApi:
     def get_fixtures(self, today: bool = True) -> List[Fixture]:
         with self.session as session:
             if today:
-                query = session.query(FixtureORM).filter(
-                    func.extract('month', FixtureORM.kick_off) == datetime.today().month,
-                    func.extract('year', FixtureORM.kick_off) == datetime.today().year,
-                    func.extract('day', FixtureORM.kick_off) == datetime.today().day
-                ).order_by(FixtureORM.kick_off)
+                query = (
+                    session.query(FixtureORM)
+                    .filter(
+                        func.extract("month", FixtureORM.kick_off) == datetime.today().month,
+                        func.extract("year", FixtureORM.kick_off) == datetime.today().year,
+                        func.extract("day", FixtureORM.kick_off) == datetime.today().day,
+                    )
+                    .order_by(FixtureORM.kick_off)
+                )
             else:
                 query = session.query(FixtureORM)
             return [Fixture.from_orm(f) for f in query.order_by(FixtureORM.kick_off).all()]

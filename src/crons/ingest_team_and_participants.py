@@ -1,6 +1,4 @@
-from src.shared.bot.api import get_bot_api
-from src.shared.db.api import get_session
-from src.shared.db.models import TeamAndParticipantORM
+from src.shared.db.api import get_db_api
 
 DRAW = {
     "Argentina": "Paddy",
@@ -38,17 +36,7 @@ DRAW = {
 }
 
 if __name__ == "__main__":
-    bot_api = get_bot_api()
+    db_api = get_db_api()
 
-    participants = bot_api.get_participants()
-    teams = bot_api.get_teams()
-
-    with get_session() as session:
-        for team, participant in DRAW.items():
-            session.add(
-                TeamAndParticipantORM(
-                    team_name=team,
-                    participant_name=participant,
-                )
-            )
-        session.commit()
+    for team_name, participant_name in DRAW.items():
+        db_api.save_team_and_participant(team_name, participant_name)

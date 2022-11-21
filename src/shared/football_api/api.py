@@ -38,15 +38,17 @@ class FootballApi:
     def teams_url(self) -> str:
         return "https://api-football-v1.p.rapidapi.com/v3/teams"
 
-    def get_fixtures(self) -> List[FootballFixture]:
+    def get_fixtures(self, today_only: bool = True) -> List[FootballFixture]:
+        params = {
+            "league": self.league_id,
+            "season": self.season,
+        }
+        if today_only:
+            params['from'] = str(date.today())
+            params['to'] = str(date.today())
         response = requests.get(
             self.fixtures_url,
-            params={
-                "league": self.league_id,
-                "season": self.season,
-                "from": str(date.today()),
-                "to": str(date.today()),
-            },
+            params=params,
             headers=self.headers,
         )
         return [FootballFixture.from_response(f) for f in response.json()["response"]]

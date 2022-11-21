@@ -4,7 +4,7 @@ from typing import List
 import attr
 from sqlalchemy.orm import Session
 
-from src.shared.bot.models import Participant, Team
+from src.shared.bot.models import Participant, Team, Fixture
 from src.shared.db.api import get_session
 from src.shared.db.models import ParticipantORM, TeamORM
 from src.shared.football_api.api import FootballApi
@@ -36,3 +36,6 @@ class BotApi:
     def get_teams(self) -> List[Team]:
         with self.session as session:
             return [Team.from_orm(t) for t in session.query(TeamORM).all()]
+
+    def get_fixtures(self) -> List[Fixture]:
+        return [Fixture.from_football_fixture(f) for f in self.football_api.get_fixtures()]

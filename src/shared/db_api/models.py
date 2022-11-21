@@ -80,6 +80,7 @@ class FixtureORM(Base):
     @classmethod
     def from_football_fixture(cls, football_fixture: FootballFixture) -> FixtureORM:
         return cls(
+            football_api_id=football_fixture.football_api_id,
             home_team_name=football_fixture.home_team_name,
             away_team_name=football_fixture.away_team_name,
             home_team_goals=football_fixture.home_team_goals,

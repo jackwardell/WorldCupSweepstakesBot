@@ -7,6 +7,7 @@ from typing import List
 import attr
 from sqlalchemy import create_engine
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 from src.shared.config import get_config
@@ -19,6 +20,10 @@ from src.shared.football_api.models import FootballTeam
 from src.shared.telegram_api.models import TelegramUser
 
 engine = create_engine(get_config().SQLALCHEMY_URL)
+
+
+class DbApiError(Exception):
+    pass
 
 
 @lru_cache
@@ -38,8 +43,12 @@ class DbApi:
         with self.session as session:
             participant = ParticipantORM.from_telegram_user(telegram_user)
             session.add(participant)
-            session.commit()
-            return participant
+            try:
+                session.commit()
+                return participant
+            except IntegrityError as e:
+                session.rollback()
+                raise DbApiError(e) from e
 
     def get_teams(self) -> List[TeamORM]:
         with self.session as session:
@@ -49,8 +58,12 @@ class DbApi:
         with self.session as session:
             team = TeamORM.from_football_team(football_team)
             session.add(team)
-            session.commit()
-            return team
+            try:
+                session.commit()
+                return team
+            except IntegrityError as e:
+                session.rollback()
+                raise DbApiError(e) from e
 
     def get_teams_and_participants(self) -> List[TeamAndParticipantORM]:
         with self.session as session:
@@ -63,8 +76,12 @@ class DbApi:
                 participant_name=participant_name,
             )
             session.add(team_and_participant)
-            session.commit()
-            return team_and_participant
+            try:
+                session.commit()
+                return team_and_participant
+            except IntegrityError as e:
+                session.rollback()
+                raise DbApiError(e) from e
 
     def get_fixtures(self, today_only: bool = True) -> List[FixtureORM]:
         with self.session as session:

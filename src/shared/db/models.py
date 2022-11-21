@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 from src.shared.telegram_api.models import TelegramUser
 from src.shared.football_api.models import FootballTeam
 
+Base = declarative_base()
+
 
 class ParticipantORM(Base):
     __tablename__ = "participant"
@@ -16,12 +18,11 @@ class ParticipantORM(Base):
     name: str = Column(String, nullable=False)
     telegram_id: int = Column(BigInteger, nullable=False)
 
-    team = relationship("TeamParticipantAssociation", back_populates="participant")
+    team = relationship("TeamParticipantAssociationORM", back_populates="participant")
 
     @classmethod
     def from_telegram_user(cls, telegram_user: TelegramUser) -> ParticipantORM:
         return cls(name=telegram_user.first_name, telegram_id=telegram_user.id)
-
 
 
 class TeamORM(Base):
@@ -30,7 +31,7 @@ class TeamORM(Base):
     id: int = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(String, nullable=False)
 
-    participant = relationship("TeamParticipantAssociation", back_populates="team")
+    participant = relationship("TeamParticipantAssociationORM", back_populates="team")
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> TeamORM:
@@ -44,5 +45,5 @@ class TeamParticipantAssociationORM(Base):
     team_id = Column(Integer, ForeignKey("team.id"), nullable=False)
     participant_id = Column(Integer, ForeignKey("participant.id"), nullable=False)
 
-    team = relationship("Team", back_populates="participant")
-    participant = relationship("Participant", back_populates="team")
+    team = relationship("TeamORM", back_populates="participant")
+    participant = relationship("ParticipantORM", back_populates="team")

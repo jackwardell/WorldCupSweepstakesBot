@@ -6,7 +6,7 @@ def main() -> None:
     db_api = get_db_api()
 
     for fixture in get_football_api().get_fixtures(today_only=False):
-        db_api.save_or_update_fixtures(fixture)
+        db_api.save_or_update_fixture(fixture)
 
 
 if __name__ == "__main__":

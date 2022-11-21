@@ -80,7 +80,7 @@ class DbApi:
                 query = session.query(FixtureORM)
             return query.all()
 
-    def save_or_update_fixtures(self, football_fixture: FootballFixture) -> FixtureORM:
+    def save_or_update_fixture(self, football_fixture: FootballFixture) -> FixtureORM:
         with self.session as session:
             try:
                 fixture = (
@@ -101,6 +101,7 @@ class DbApi:
                     fixture.away_team_won = football_fixture.away_team_winner
                 session.commit()
             except NoResultFound:
+                session.rollback()
                 fixture = FixtureORM.from_football_fixture(football_fixture)
                 session.add(fixture)
                 session.commit()

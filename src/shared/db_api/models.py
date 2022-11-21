@@ -53,6 +53,10 @@ class TeamAndParticipantORM(Base):
     team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
     participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
 
+    @classmethod
+    def from_team_name_and_participant_name(cls, team_name: str, participant_name: str) -> TeamORM:
+        return cls(team_name=team_name, participant_name=participant_name)
+
 
 class FixtureORM(Base):
     __tablename__ = "fixture"

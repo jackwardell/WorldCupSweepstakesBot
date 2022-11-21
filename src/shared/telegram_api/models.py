@@ -9,5 +9,5 @@ class TelegramUser(BaseModel):
     first_name: str
 
     @classmethod
-    def from_telegram(cls, user: User):
+    def from_telegram(cls, user: User) -> TelegramUser:
         return cls(id=user.id, first_name=user.first_name)

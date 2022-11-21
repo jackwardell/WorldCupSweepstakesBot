@@ -58,7 +58,10 @@ class DbApi:
 
     def save_team_and_participant(self, team_name: str, participant_name: str) -> TeamAndParticipantORM:
         with self.session as session:
-            team_and_participant = TeamAndParticipantORM(team_name=team_name, participant_name=participant_name)
+            team_and_participant = TeamAndParticipantORM.from_team_name_and_participant_name(
+                team_name=team_name,
+                participant_name=participant_name,
+            )
             session.add(team_and_participant)
             session.commit()
             return team_and_participant

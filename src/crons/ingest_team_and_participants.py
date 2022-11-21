@@ -35,8 +35,13 @@ DRAW = {
     "Wales": "Emma",
 }
 
-if __name__ == "__main__":
+
+def main() -> None:
     db_api = get_db_api()
 
     for team_name, participant_name in DRAW.items():
         db_api.save_team_and_participant(team_name, participant_name)
+
+
+if __name__ == "__main__":
+    main()

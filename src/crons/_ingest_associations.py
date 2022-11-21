@@ -43,14 +43,11 @@ if __name__ == "__main__":
     participants = bot_api.get_participants()
     teams = bot_api.get_teams()
 
-    participants_mapping = {p.name: p.id for p in participants}
-    teams_mapping = {t.name: t.id for t in teams}
-
     with get_session() as session:
         for team, participant in DRAW.items():
             session.add(
                 TeamParticipantAssociationORM(
-                    team_id=teams_mapping[team], participant_id=participants_mapping[participant]
+                    team_name=team, participant_name=participant
                 )
             )
         session.commit()

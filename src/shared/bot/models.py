@@ -10,7 +10,6 @@ from src.shared.db.models import ParticipantORM, TeamORM, TeamParticipantAssocia
 
 
 class Participant(BaseModel):
-    id: int
     name: str
     telegram_id: int
 
@@ -20,11 +19,10 @@ class Participant(BaseModel):
 
     @classmethod
     def from_orm(cls, participant: ParticipantORM) -> Participant:
-        return cls(id=participant.id, name=participant.name, telegram_id=participant.telegram_id)
+        return cls(name=participant.name, telegram_id=participant.telegram_id)
 
 
 class Team(BaseModel):
-    id: int
     name: str
 
     @property
@@ -33,13 +31,13 @@ class Team(BaseModel):
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
-        return cls(id=team.id, name=team.name)
+        return cls(name=team.name)
 
 
 class TeamResult(BaseModel):
     team: Team
     goals: Optional[int]
-    winner: bool
+    winner: Optional[bool]
     participant: Participant
 
     @property

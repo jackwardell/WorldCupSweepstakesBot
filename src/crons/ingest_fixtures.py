@@ -1,17 +1,15 @@
-from src.shared.bot.api import get_bot_api
+from src.shared.football_api.api import get_football_api
 from src.shared.db.api import get_session
-from src.shared.db.models import ParticipantORM
+from src.shared.db.models import FixtureORM
 
 if __name__ == "__main__":
-    bot_api = get_bot_api()
+    bot_api = get_football_api()
 
-    fixtures = get_bot_api().get_fixtures()
+    football_fixtures = get_football_api().get_fixtures(today_only=False)
 
-    print(fixtures)
-    #
-    # with get_session() as session:
-    #     for user in users:
-    #         participant = ParticipantORM.from_telegram_user(user)
-    #         session.add(participant)
-    #
-    #     session.commit()
+    with get_session() as session:
+        for football_fixture in football_fixtures:
+            participant = FixtureORM.from_telegram_user(user)
+            session.add(participant)
+
+        session.commit()

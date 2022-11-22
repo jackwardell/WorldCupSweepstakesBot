@@ -45,32 +45,3 @@ class FootballFixture(BaseModel):
             round=response["league"]["round"],
         )
         return fixture
-
-    # @property
-    # def morning_message(self) -> str:
-    #     message = (
-    #         "🤝 Teams: {home_team_name} {home_team_emoji} play {away_team_name} {away_team_emoji} \n"
-    #         "🏟️Stadium: {venue_name} in {venue_city} 🧑‍🤝‍🧑\n"
-    #         "🦵 Kick Off: {kick_off} today ⏱️\n"
-    #         "🔢 Round: {round} 💫\n"
-    #         "⚔️ Rivals: [{home_rival_name}](tg://user?id={home_rival_telegram_id}) "
-    #         "vs. [{away_rival_name}](tg://user?id={away_rival_telegram_id}) 😈"
-    #     ).format(
-    #         home_team_name=self.home_team.name,
-    #         home_team_emoji=self.home_team.emoji,
-    #         away_team_name=self.away_team.name,
-    #         away_team_emoji=self.away_team.emoji,
-    #         venue_name=self.venue_name,
-    #         venue_city=self.venue_city,
-    #         kick_off=self.kick_off.time(),
-    #         round=self.round,
-    #         home_rival_name=self.home_team.participant.display_name,
-    #         away_rival_name=self.away_team.participant.display_name,
-    #         home_rival_telegram_id=self.home_team.participant.telegram_id,
-    #         away_rival_telegram_id=self.away_team.participant.telegram_id,
-    #     )
-    #     return message
-    #
-    # @property
-    # def home_and_away_rivals_equal(self) -> bool:
-    #     return self.home_team.participant == self.away_team.participant

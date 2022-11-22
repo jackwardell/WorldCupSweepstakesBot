@@ -128,14 +128,11 @@ class BotApi:
                     .filter(FixtureORM.round == football_fixture.round)
                     .one()
                 )
-                if fixture.home_team_goals is not None:
-                    fixture.home_team_goals = football_fixture.home_team_goals
-                if fixture.away_team_goals is not None:
-                    fixture.away_team_goals = football_fixture.away_team_goals
-                if fixture.home_team_won is not None:
-                    fixture.home_team_won = football_fixture.home_team_winner
-                if fixture.away_team_won is not None:
-                    fixture.away_team_won = football_fixture.away_team_winner
+                fixture.home_team_goals = football_fixture.home_team_goals
+                fixture.away_team_goals = football_fixture.away_team_goals
+                fixture.home_team_won = football_fixture.home_team_winner
+                fixture.away_team_won = football_fixture.away_team_winner
+                session.add(fixture)
                 session.commit()
             except NoResultFound:
                 session.rollback()

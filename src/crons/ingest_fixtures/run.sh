@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python $PROJECT_DIR/src/crons/ingest_fixtures/ingest_fixtures.py
+python3 /root/WorldCupSweepstakesBot/src/crons/ingest_fixtures/ingest_fixtures.py

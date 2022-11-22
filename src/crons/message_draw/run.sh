@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python $PROJECT_DIR/src/crons/message_draw/message_draw.py
+python3 /root/WorldCupSweepstakesBot/src/crons/message_draw/message_draw.py

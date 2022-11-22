@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python $PROJECT_DIR/src/crons/ingest_participants/ingest_participants.py
+python3 /root/WorldCupSweepstakesBot/src/crons/ingest_participants/ingest_participants.py

@@ -88,7 +88,7 @@ class Fixture(BaseModel):
             "🏟️ Stadium: {venue_name} in {venue_city} 🧑‍🤝‍🧑\n"
             "🦵 Kick Off: {kick_off} today ⏱️\n"
             "🔢 Round: {round} 💫\n"
-            "⚔️ Rivals: {home_participant_tag} vs. {away_participant_tag} 😈\n"
+            "⚔️ Rivals: {home_participant_tag} vs. {away_participant_tag} 😈"
         ).format(
             home_team_name=self.home_team.name,
             home_team_emoji=self.home_team.emoji,

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from pydantic import BaseModel
 from src.shared.open_weather_map_api.responses import WeatherResponse
 
@@ -68,3 +70,14 @@ class Weather(BaseModel):
     @classmethod
     def from_response(cls, response: WeatherResponse) -> Weather:
         return cls(emoji=WEATHER_ID_TO_EMOJI[response["weather"][0]["id"]])
+
+    @property
+    def weather_message(self) -> str:
+        if datetime.utcnow().hour <= 12:
+            time_of_day = "Morning"
+        elif datetime.utcnow().hour <= 18:
+            time_of_day = "Afternoon"
+        else:
+            time_of_day = "Evening"
+        weather_emoji = self.emoji
+        return f"{weather_emoji} Good {time_of_day} Friends {weather_emoji}"

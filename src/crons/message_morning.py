@@ -13,7 +13,7 @@ if __name__ == "__main__":
     weather_api = get_open_weather_map_api()
     bot_api = get_bot_api()
 
-    telegram_api.send_message(weather_api.get_weather_message())
+    telegram_api.send_message(weather_api.get_weather_in_peckham().weather_message)
     telegram_api.send_message(bot_api.get_number_of_fixtures_message())
 
     fixtures = bot_api.get_fixtures()

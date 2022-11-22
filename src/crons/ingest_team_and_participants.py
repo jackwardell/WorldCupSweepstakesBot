@@ -1,5 +1,5 @@
-from src.shared.db_api.api import DbApiError
-from src.shared.db_api.api import get_db_api
+from src.shared.bot_api.api import BotApiError
+from src.shared.bot_api.api import get_bot_api
 
 DRAW = {
     "Argentina": "Paddy",
@@ -38,12 +38,12 @@ DRAW = {
 
 
 def main() -> None:
-    db_api = get_db_api()
+    db_api = get_bot_api()
 
     for team_name, participant_name in DRAW.items():
         try:
             db_api.save_team_and_participant(team_name, participant_name)
-        except DbApiError:
+        except BotApiError:
             pass
 
 

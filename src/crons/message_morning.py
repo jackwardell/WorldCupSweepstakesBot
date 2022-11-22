@@ -1,4 +1,4 @@
-from src.shared.bot_api.api import get_bot_api
+from src.shared.bot_api.api import get_db_api
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.telegram_api.api import get_telegram_api
 
@@ -15,7 +15,9 @@ if __name__ == "__main__":
     weather_emoji = weather_api.get_weather_in_peckham().emoji
     telegram_api.send_message(f"{weather_emoji} Good Morning Friends {weather_emoji}")
 
-    fixtures = get_bot_api().get_fixtures()
+    fixtures = get_db_api().get_fixtures()
+
+    telegram_api.send_message(f"Today there {len(fixtures)} matches. Here are the fixtures 👇")
     # matching_participants_message_ids = []
 
     if fixtures:

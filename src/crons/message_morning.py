@@ -4,11 +4,6 @@ from src.shared.telegram_api.api import get_telegram_api
 
 
 def main() -> None:
-    pass
-
-
-if __name__ == "__main__":
-
     telegram_api = get_telegram_api()
     weather_api = get_open_weather_map_api()
     bot_api = get_bot_api()
@@ -31,3 +26,7 @@ if __name__ == "__main__":
     if matching_participants_and_message_ids:
         for participant_name, message_id in matching_participants_and_message_ids.items():
             telegram_api.send_spiderman_image(participant_name, reply_to_message_id=message_id)
+
+
+if __name__ == "__main__":
+    main()

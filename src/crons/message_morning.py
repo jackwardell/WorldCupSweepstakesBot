@@ -9,7 +9,7 @@ def main() -> None:
     bot_api = get_bot_api()
 
     telegram_api.send_message(weather_api.get_weather_in_peckham().weather_message)
-    telegram_api.send_message(bot_api.get_number_of_fixtures_message())
+    telegram_api.send_message(bot_api.get_number_of_fixtures_morning_message())
 
     fixtures = bot_api.get_fixtures()
 

@@ -45,7 +45,7 @@ class BotApi:
     telegram_api: TelegramApi = attr.ib(factory=get_telegram_api)
     open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
 
-    def get_number_of_fixtures_message(self) -> str:
+    def get_number_of_fixtures_morning_message(self) -> str:
         fixtures = self.get_fixtures()
         if len(fixtures) == 0:
             return "No fixtures today, just chill the fuck out 🍻"

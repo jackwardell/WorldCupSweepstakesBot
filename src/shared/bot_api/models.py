@@ -138,20 +138,6 @@ class Fixture(BaseModel):
         )
         return message
 
-
-# class FixtureCollection(BaseModel):
-#     fixtures: List[Fixture]
-#
-#     @classmethod
-#     def from_fixtures(cls, fixtures: List[FixtureORM]) -> FixtureCollection:
-#         return cls(fixtures=[Fixture.from_orm(f) for f in fixtures])
-#
-#     @property
-#     def fixture_message(self) -> str:
-#         if len(self.fixtures) == 0:
-#             fixture_message = "No fixtures today, just chill the fuck out 🍻"
-#         elif len(self.fixtures) == 1:
-#             fixture_message = "Today there is one match. Here's the fixture 👇"
-#         else:
-#             fixture_message = f"Today there {len(self.fixtures)} matches. Here are the fixtures 👇"
-#         return fixture_message
+    @property
+    def matching_participants(self) -> bool:
+        return self.home_participant.name == self.away_participant.name

@@ -45,36 +45,14 @@ class BotApi:
     telegram_api: TelegramApi = attr.ib(factory=get_telegram_api)
     open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
 
-    # @property
-    # def weather_message(self) -> str:
-    #     if datetime.utcnow().hour <= 12:
-    #         time_of_day = "Morning"
-    #     elif datetime.utcnow().hour <= 18:
-    #         time_of_day = "Afternoon"
-    #     else:
-    #         time_of_day = "Evening"
-    #     weather_emoji = self.open_weather_map_api.get_weather_in_peckham()
-    #     return f"{weather_emoji} Good {time_of_day} Friends {weather_emoji}"
-    #
-    # @property
-    # def good_luck_message(self) -> str:
-    #     return "🍀 Good luck everyone! 🍀"
-    #
-    # def generate_morning_message(self) -> None:
-    #     fixture_collection = self.get_fixtures_today()
-    #     step_one_messages_to_send = [
-    #         self.weather_message,
-    #         fixture_collection.fixture_message,
-    #     ]
-    #     step_two_messages_to_send = [f.morning_message for f in self.get_fixtures_today()]
-    #     if step_two_messages_to_send:
-    #         step_three_messages_to_send = [self.good_luck_message]
-    #     else:
-    #         step_three_messages_to_send = []
-    #     all_messages_to_send = step_one_messages_to_send + step_two_messages_to_send + step_three_messages_to_send
-    #
-    #     for message in all_messages_to_send:
-    #         self.telegram_api.send_message(message)
+    def get_number_of_fixtures_message(self) -> str:
+        fixtures = self.get_fixtures()
+        if len(fixtures) == 0:
+            return "No fixtures today, just chill the fuck out 🍻"
+        elif len(fixtures) == 1:
+            return "Today there is one match. Here's the fixture 👇"
+        else:
+            return f"Today there {len(fixtures)} matches. Here are the fixtures 👇"
 
     def get_participants(self) -> List[Participant]:
         with self.session as session:

@@ -94,9 +94,12 @@ class BotApi:
                 team_name=team_name,
                 participant_name=participant_name,
             )
+            print(team_and_participant.__dict__)
             session.add(team_and_participant)
+            print(team_and_participant.__dict__)
             try:
                 session.commit()
+                print(team_and_participant.__dict__)
                 return TeamAndParticipant.from_orm(team_and_participant)
             except IntegrityError as e:
                 session.rollback()

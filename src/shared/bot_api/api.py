@@ -88,19 +88,16 @@ class BotApi:
         with self.session as session:
             return [TeamAndParticipant.from_orm(t) for t in session.query(TeamAndParticipantORM).all()]
 
-    def save_team_and_participant(self, team_name: str, participant_name: str) -> TeamAndParticipant:
+    def save_team_and_participant(self, team_name: str, participant_name: str) -> None:
         with self.session as session:
             team_and_participant = TeamAndParticipantORM.from_team_name_and_participant_name(
                 team_name=team_name,
                 participant_name=participant_name,
             )
-            print("a", team_and_participant.__dict__)
             session.add(team_and_participant)
-            print("b", team_and_participant.__dict__)
             try:
                 session.commit()
-                print("c", team_and_participant.__dict__)
-                return TeamAndParticipant.from_orm(team_and_participant)
+                return
             except IntegrityError as e:
                 session.rollback()
                 raise BotApiError(e) from e

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python3 /root/WorldCupSweepstakesBot/src/crons/message_evening/message_evening.py
+/root/WorldCupSweepstakesBot/venv/bin/python /root/WorldCupSweepstakesBot/src/crons/message_evening

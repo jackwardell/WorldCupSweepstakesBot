@@ -41,7 +41,6 @@ def main() -> None:
     db_api = get_bot_api()
 
     for team_name, participant_name in DRAW.items():
-        print(team_name, participant_name)
         try:
             db_api.save_team_and_participant(team_name, participant_name)
         except BotApiError:

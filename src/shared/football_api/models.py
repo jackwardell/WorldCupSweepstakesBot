@@ -29,6 +29,15 @@ class FootballFixture(BaseModel):
     venue_name: str
     round: str
 
+    home_goals_halftime: Optional[int]
+    away_goals_halftime: Optional[int]
+    home_goals_fulltime: Optional[int]
+    away_goals_fulltime: Optional[int]
+    away_goals_extratime: Optional[int]
+    home_goals_extratime: Optional[int]
+    home_goals_penalties: Optional[int]
+    away_goals_penalties: Optional[int]
+
     @classmethod
     def from_response(cls, response: FixtureResponse) -> FootballFixture:
         fixture = cls(
@@ -43,5 +52,13 @@ class FootballFixture(BaseModel):
             venue_city=response["fixture"]["venue"]["city"],
             venue_name=response["fixture"]["venue"]["name"],
             round=response["league"]["round"],
+            home_goals_halftime=response["score"]["halftime"]["home"],
+            away_goals_halftime=response["score"]["halftime"]["away"],
+            home_goals_fulltime=response["score"]["fulltime"]["home"],
+            away_goals_fulltime=response["score"]["fulltime"]["away"],
+            away_goals_extratime=response["score"]["extratime"]["home"],
+            home_goals_extratime=response["score"]["extratime"]["away"],
+            home_goals_penalties=response["score"]["penalty"]["home"],
+            away_goals_penalties=response["score"]["penalty"]["away"],
         )
         return fixture

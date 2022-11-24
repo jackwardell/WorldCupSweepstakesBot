@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import BigInteger
 from sqlalchemy import Boolean
@@ -68,14 +69,23 @@ class FixtureORM(Base):
     football_api_id: str = Column(String, nullable=False)
     home_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
     away_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
-    home_team_goals: int = Column(Integer, nullable=True)
-    away_team_goals: int = Column(Integer, nullable=True)
-    home_team_won: bool = Column(Boolean, nullable=True)
-    away_team_won: bool = Column(Boolean, nullable=True)
+    home_team_goals: Optional[int] = Column(Integer, nullable=True)
+    away_team_goals: Optional[int] = Column(Integer, nullable=True)
+    home_team_won: Optional[bool] = Column(Boolean, nullable=True)
+    away_team_won: Optional[bool] = Column(Boolean, nullable=True)
     venue_name: str = Column(String, nullable=False)
     venue_city: str = Column(String, nullable=False)
     kick_off: datetime = Column(DateTime, nullable=False)
     round: str = Column(String, nullable=False)
+
+    home_goals_halftime: Optional[int] = Column(String, nullable=True)
+    away_goals_halftime: Optional[int] = Column(String, nullable=True)
+    home_goals_fulltime: Optional[int] = Column(String, nullable=True)
+    away_goals_fulltime: Optional[int] = Column(String, nullable=True)
+    away_goals_extratime: Optional[int] = Column(String, nullable=True)
+    home_goals_extratime: Optional[int] = Column(String, nullable=True)
+    home_goals_penalties: Optional[int] = Column(String, nullable=True)
+    away_goals_penalties: Optional[int] = Column(String, nullable=True)
 
     home_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.home_team_name")
     away_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.away_team_name")
@@ -94,4 +104,12 @@ class FixtureORM(Base):
             venue_city=football_fixture.venue_city,
             venue_name=football_fixture.venue_name,
             round=football_fixture.round,
+            home_goals_halftime=football_fixture.home_goals_halftime,
+            away_goals_halftime=football_fixture.away_goals_halftime,
+            home_goals_fulltime=football_fixture.home_goals_fulltime,
+            away_goals_fulltime=football_fixture.away_goals_fulltime,
+            home_goals_extratime=football_fixture.home_goals_extratime,
+            away_goals_extratime=football_fixture.away_goals_extratime,
+            home_goals_penalties=football_fixture.home_goals_penalties,
+            away_goals_penalties=football_fixture.away_goals_penalties,
         )

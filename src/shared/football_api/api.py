@@ -57,3 +57,11 @@ class FootballApi:
             headers=self.headers,
         )
         return [FootballTeam.from_response(t) for t in response.json()["response"]]
+
+    def get_players(self) -> List[FootballTeam]:
+        response = requests.get(
+            self.teams_url,
+            params={"league": self.league_id, "season": self.season},
+            headers=self.headers,
+        )
+        return [FootballTeam.from_response(t) for t in response.json()["response"]]

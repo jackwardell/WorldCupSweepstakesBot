@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 from typing import TypedDict
 
@@ -100,3 +101,129 @@ class TeamResponseVenue(TypedDict):
 class TeamResponse(TypedDict):
     team: TeamResponseTeam
     venue: TeamResponseVenue
+
+
+class PlayerResponsePlayerBirth(TypedDict):
+    date: date
+    place: str
+    country: str
+
+
+class PlayerResponsePlayer(TypedDict):
+    id: int
+    name: str
+    firstname: str
+    lastname: str
+    age: int
+    birth: PlayerResponsePlayerBirth
+    nationality: str
+    height: str
+    weight: str
+    injured: bool
+    photo: str
+
+
+class PlayerResponseStatisticsTeam(TypedDict):
+    id: str
+    name: str
+    logo: str
+
+
+class PlayerResponseStatisticsLeague(TypedDict):
+    id: Optional[int]
+    name: str
+    country: str
+    logo: str
+    flag: Optional[str]
+    season: int
+
+
+class PlayerResponseStatisticsGames(TypedDict):
+    appearences: int
+    lineups: int
+    minutes: int
+    number: Optional[int]
+    position: str
+    rating: Optional[str]
+    captain: bool
+
+
+class PlayerResponseStatisticsSubstitutes(TypedDict):
+    in_: int
+    out: int
+    bench: int
+
+
+class PlayerResponseStatisticsShots(TypedDict):
+    total: Optional[int]
+    on: Optional[int]
+
+
+class PlayerResponseStatisticsShotsGoals(TypedDict):
+    total: int
+    conceded: int
+    assists: Optional[int]
+    saves: Optional[int]
+
+
+class PlayerResponseStatisticsShotsPasses(TypedDict):
+    total: Optional[int]
+    key: Optional[int]
+    accuracy: Optional[int]
+
+
+class PlayerResponseStatisticsShotsTackles(TypedDict):
+    total: Optional[int]
+    blocks: Optional[int]
+    interceptions: Optional[int]
+
+
+class PlayerResponseStatisticsDuels(TypedDict):
+    total: Optional[int]
+    won: Optional[int]
+
+
+class PlayerResponseStatisticsDribbles(TypedDict):
+    attempts: Optional[int]
+    success: Optional[int]
+    past: Optional[int]
+
+
+class PlayerResponseStatisticsFouls(TypedDict):
+    drawn: Optional[int]
+    committed: Optional[int]
+
+
+class PlayerResponseStatisticsCards(TypedDict):
+    yellow: int
+    yellowred: int
+    red: int
+
+
+class PlayerResponseStatisticsPenalty(TypedDict):
+    won: Optional[int]
+    commited: Optional[int]
+    scored: int
+    missed: int
+    saved: Optional[int]
+
+
+class PlayerResponseStatistics(TypedDict):
+    team: PlayerResponseStatisticsTeam
+    league: PlayerResponseStatisticsLeague
+    games: PlayerResponseStatisticsGames
+    substitutes: PlayerResponseStatisticsSubstitutes
+    shots: PlayerResponseStatisticsShots
+    goals: PlayerResponseStatisticsShotsGoals
+    passes: PlayerResponseStatisticsShotsPasses
+    tackles: PlayerResponseStatisticsShotsTackles
+    duels: PlayerResponseStatisticsDuels
+    dribbles: PlayerResponseStatisticsDribbles
+    fouls: PlayerResponseStatisticsFouls
+    cards: PlayerResponseStatisticsCards
+    penalty: PlayerResponseStatisticsPenalty
+
+
+class PlayerResponse(TypedDict):
+    player: PlayerResponsePlayer
+    statistics: PlayerResponseStatistics

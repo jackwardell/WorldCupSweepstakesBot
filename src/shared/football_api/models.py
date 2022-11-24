@@ -62,3 +62,7 @@ class FootballFixture(BaseModel):
             away_goals_penalties=response["score"]["penalty"]["away"],
         )
         return fixture
+
+
+class FootballPlayer(BaseModel):
+    pass

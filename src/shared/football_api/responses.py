@@ -3,40 +3,40 @@ from typing import Optional
 from typing import TypedDict
 
 
-class FixturesResponseFixturePeriods(TypedDict):
+class FixturesFixturesResponseFixturePeriods(TypedDict):
     first: Optional[int]
     second: Optional[int]
 
 
-class FixturesResponseFixtureStatus(TypedDict):
+class FixturesFixturesResponseFixtureStatus(TypedDict):
     elapsed: Optional[int]
     long: str
     short: str
 
 
-class FixtureResponseFixtureVenue(TypedDict):
+class FixturesFixturesResponseFixtureVenue(TypedDict):
     id: Optional[int]
     city: str
     name: str
 
 
-class FixtureResponseFixture(TypedDict):
+class FixturesFixturesResponseFixture(TypedDict):
     id: str
     date: str
-    periods: FixturesResponseFixturePeriods
+    periods: FixturesFixturesResponseFixturePeriods
     referee: Optional[str]
-    status: FixturesResponseFixtureStatus
+    status: FixturesFixturesResponseFixtureStatus
     timestamp: int
     timezone: str
-    venue: FixtureResponseFixtureVenue
+    venue: FixturesFixturesResponseFixtureVenue
 
 
-class FixtureResponseGoals(TypedDict):
+class FixturesFixturesResponseGoals(TypedDict):
     away: Optional[int]
     home: Optional[int]
 
 
-class FixtureResponseLeague(TypedDict):
+class FixturesFixturesResponseLeague(TypedDict):
     id: int
     country: str
     flag: Optional[str]
@@ -46,39 +46,39 @@ class FixtureResponseLeague(TypedDict):
     season: int
 
 
-class FixtureResponseScorePattern(TypedDict):
+class FixturesFixturesResponseScorePattern(TypedDict):
     away: Optional[int]
     home: Optional[int]
 
 
-class FixtureResponseScore(TypedDict):
-    extratime: FixtureResponseScorePattern
-    fulltime: FixtureResponseScorePattern
-    halftime: FixtureResponseScorePattern
-    penalty: FixtureResponseScorePattern
+class FixturesFixturesResponseScore(TypedDict):
+    extratime: FixturesFixturesResponseScorePattern
+    fulltime: FixturesFixturesResponseScorePattern
+    halftime: FixturesFixturesResponseScorePattern
+    penalty: FixturesFixturesResponseScorePattern
 
 
-class FixtureResponseTeamPattern(TypedDict):
+class FixturesFixturesResponseTeamPattern(TypedDict):
     id: int
     logo: str
     name: str
     winner: Optional[bool]
 
 
-class FixtureResponseTeams(TypedDict):
-    home: FixtureResponseTeamPattern
-    away: FixtureResponseTeamPattern
+class FixturesFixturesResponseTeams(TypedDict):
+    home: FixturesFixturesResponseTeamPattern
+    away: FixturesFixturesResponseTeamPattern
 
 
-class FixtureResponse(TypedDict):
-    fixture: FixtureResponseFixture
-    goals: FixtureResponseGoals
-    league: FixtureResponseLeague
-    score: FixtureResponseScore
-    teams: FixtureResponseTeams
+class FixturesFixturesResponse(TypedDict):
+    fixture: FixturesFixturesResponseFixture
+    goals: FixturesFixturesResponseGoals
+    league: FixturesFixturesResponseLeague
+    score: FixturesFixturesResponseScore
+    teams: FixturesFixturesResponseTeams
 
 
-class TeamResponseTeam(TypedDict):
+class TeamTeamInformationResponseTeam(TypedDict):
     id: int
     name: str
     code: str
@@ -88,7 +88,7 @@ class TeamResponseTeam(TypedDict):
     logo: bool
 
 
-class TeamResponseVenue(TypedDict):
+class TeamTeamInformationResponseVenue(TypedDict):
     id: int
     name: str
     address: str
@@ -98,24 +98,24 @@ class TeamResponseVenue(TypedDict):
     image: str
 
 
-class TeamResponse(TypedDict):
-    team: TeamResponseTeam
-    venue: TeamResponseVenue
+class TeamTeamInformationResponse(TypedDict):
+    team: TeamTeamInformationResponseTeam
+    venue: TeamTeamInformationResponseVenue
 
 
-class PlayerResponsePlayerBirth(TypedDict):
+class PlayerPlayerResponsePlayerBirth(TypedDict):
     date: date
     place: str
     country: str
 
 
-class PlayerResponsePlayer(TypedDict):
+class PlayerPlayerResponsePlayer(TypedDict):
     id: int
     name: str
     firstname: str
     lastname: str
     age: int
-    birth: PlayerResponsePlayerBirth
+    birth: PlayerPlayerResponsePlayerBirth
     nationality: str
     height: str
     weight: str
@@ -123,13 +123,13 @@ class PlayerResponsePlayer(TypedDict):
     photo: str
 
 
-class PlayerResponseStatisticsTeam(TypedDict):
+class PlayerPlayerResponseStatisticsTeam(TypedDict):
     id: str
     name: str
     logo: str
 
 
-class PlayerResponseStatisticsLeague(TypedDict):
+class PlayerPlayerResponseStatisticsLeague(TypedDict):
     id: Optional[int]
     name: str
     country: str
@@ -138,7 +138,7 @@ class PlayerResponseStatisticsLeague(TypedDict):
     season: int
 
 
-class PlayerResponseStatisticsGames(TypedDict):
+class PlayerPlayerResponseStatisticsGames(TypedDict):
     appearences: int
     lineups: int
     minutes: int
@@ -148,59 +148,59 @@ class PlayerResponseStatisticsGames(TypedDict):
     captain: bool
 
 
-class PlayerResponseStatisticsSubstitutes(TypedDict):
+class PlayerPlayerResponseStatisticsSubstitutes(TypedDict):
     in_: int
     out: int
     bench: int
 
 
-class PlayerResponseStatisticsShots(TypedDict):
+class PlayerPlayerResponseStatisticsShots(TypedDict):
     total: Optional[int]
     on: Optional[int]
 
 
-class PlayerResponseStatisticsShotsGoals(TypedDict):
+class PlayerPlayerResponseStatisticsShotsGoals(TypedDict):
     total: int
     conceded: int
     assists: Optional[int]
     saves: Optional[int]
 
 
-class PlayerResponseStatisticsShotsPasses(TypedDict):
+class PlayerPlayerResponseStatisticsShotsPasses(TypedDict):
     total: Optional[int]
     key: Optional[int]
     accuracy: Optional[int]
 
 
-class PlayerResponseStatisticsShotsTackles(TypedDict):
+class PlayerPlayerResponseStatisticsShotsTackles(TypedDict):
     total: Optional[int]
     blocks: Optional[int]
     interceptions: Optional[int]
 
 
-class PlayerResponseStatisticsDuels(TypedDict):
+class PlayerPlayerResponseStatisticsDuels(TypedDict):
     total: Optional[int]
     won: Optional[int]
 
 
-class PlayerResponseStatisticsDribbles(TypedDict):
+class PlayerPlayerResponseStatisticsDribbles(TypedDict):
     attempts: Optional[int]
     success: Optional[int]
     past: Optional[int]
 
 
-class PlayerResponseStatisticsFouls(TypedDict):
+class PlayerPlayerResponseStatisticsFouls(TypedDict):
     drawn: Optional[int]
     committed: Optional[int]
 
 
-class PlayerResponseStatisticsCards(TypedDict):
+class PlayerPlayerResponseStatisticsCards(TypedDict):
     yellow: int
     yellowred: int
     red: int
 
 
-class PlayerResponseStatisticsPenalty(TypedDict):
+class PlayerPlayerResponseStatisticsPenalty(TypedDict):
     won: Optional[int]
     commited: Optional[int]
     scored: int
@@ -208,22 +208,53 @@ class PlayerResponseStatisticsPenalty(TypedDict):
     saved: Optional[int]
 
 
-class PlayerResponseStatistics(TypedDict):
-    team: PlayerResponseStatisticsTeam
-    league: PlayerResponseStatisticsLeague
-    games: PlayerResponseStatisticsGames
-    substitutes: PlayerResponseStatisticsSubstitutes
-    shots: PlayerResponseStatisticsShots
-    goals: PlayerResponseStatisticsShotsGoals
-    passes: PlayerResponseStatisticsShotsPasses
-    tackles: PlayerResponseStatisticsShotsTackles
-    duels: PlayerResponseStatisticsDuels
-    dribbles: PlayerResponseStatisticsDribbles
-    fouls: PlayerResponseStatisticsFouls
-    cards: PlayerResponseStatisticsCards
-    penalty: PlayerResponseStatisticsPenalty
+class PlayerPlayerResponseStatistics(TypedDict):
+    team: PlayerPlayerResponseStatisticsTeam
+    league: PlayerPlayerResponseStatisticsLeague
+    games: PlayerPlayerResponseStatisticsGames
+    substitutes: PlayerPlayerResponseStatisticsSubstitutes
+    shots: PlayerPlayerResponseStatisticsShots
+    goals: PlayerPlayerResponseStatisticsShotsGoals
+    passes: PlayerPlayerResponseStatisticsShotsPasses
+    tackles: PlayerPlayerResponseStatisticsShotsTackles
+    duels: PlayerPlayerResponseStatisticsDuels
+    dribbles: PlayerPlayerResponseStatisticsDribbles
+    fouls: PlayerPlayerResponseStatisticsFouls
+    cards: PlayerPlayerResponseStatisticsCards
+    penalty: PlayerPlayerResponseStatisticsPenalty
 
 
-class PlayerResponse(TypedDict):
-    player: PlayerResponsePlayer
-    statistics: PlayerResponseStatistics
+class PlayerPlayerResponse(TypedDict):
+    player: PlayerPlayerResponsePlayer
+    statistics: PlayerPlayerResponseStatistics
+
+
+class FixturesEventsResponseTime(TypedDict):
+    elapsed: int
+    extra: Optional[int]
+
+
+class FixturesEventsResponseTeam(TypedDict):
+    id: int
+    name: str
+    logo: str
+
+
+class FixturesEventsResponsePlayer(TypedDict):
+    id: int
+    name: str
+
+
+class FixturesEventsResponseAssist(TypedDict):
+    id: int
+    name: str
+
+
+class FixturesEventsResponse(TypedDict):
+    time: FixturesEventsResponseTime
+    team: FixturesEventsResponseTeam
+    player: FixturesEventsResponsePlayer
+    assist: FixturesEventsResponseAssist
+    type: Optional[str]
+    detail: Optional[str]
+    comments: Optional[str]

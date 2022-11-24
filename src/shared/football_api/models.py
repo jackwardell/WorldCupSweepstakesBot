@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from datetime import datetime
 from typing import Optional
 
@@ -65,4 +66,8 @@ class FootballFixture(BaseModel):
 
 
 class FootballPlayer(BaseModel):
-    pass
+    first_name: str
+    last_name: str
+    football_api_id: int
+    date_of_birth: date
+    team_name: str

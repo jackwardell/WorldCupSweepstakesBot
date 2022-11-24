@@ -35,6 +35,10 @@ class FootballApi:
     def teams_url(self) -> str:
         return "https://api-football-v1.p.rapidapi.com/v3/teams"
 
+    @property
+    def players_url(self) -> str:
+        return "https://api-football-v1.p.rapidapi.com/v3/players"
+
     def get_fixtures(self, today_only: bool = True) -> List[FootballFixture]:
         params = {
             "league": self.league_id,
@@ -60,8 +64,20 @@ class FootballApi:
 
     def get_players(self) -> List[FootballTeam]:
         response = requests.get(
-            self.teams_url,
+            self.players_url,
             params={"league": self.league_id, "season": self.season},
             headers=self.headers,
         )
-        return [FootballTeam.from_response(t) for t in response.json()["response"]]
+        players = [FootballTeam.from_response(t) for t in response.json()["response"]]
+        number_of_pages = response.json()["paging"]["total"]
+        for _ in range(number_of_pages):
+            response = requests.get(
+                self.players_url,
+                params={"league": self.league_id, "season": self.season},
+                headers=self.headers,
+            )
+            players.extend([FootballTeam.from_response(t) for t in response.json()["response"]])
+        assert (
+            response.json()["paging"]["current"] == number_of_pages
+        ), f"{response.json()['paging']['current']} != {number_of_pages}"
+        return players

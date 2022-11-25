@@ -6,6 +6,11 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class UserSchema(BaseModel):
+    telegram_user_id: int
+    first_name: str
+
+
 class FixtureEventType(Enum):
     CARD = "Card"
     GOAL = "Goal"

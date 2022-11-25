@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from src.shared.schemas import UserSchema
 from telegram import User
 
 
-class TelegramUser(BaseModel):
-    id: int
-    first_name: str
-
+class TelegramUser(UserSchema):
     @classmethod
     def from_telegram(cls, user: User) -> TelegramUser:
         return cls(id=user.id, first_name=user.first_name)

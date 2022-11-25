@@ -25,8 +25,6 @@ class TeamSchema(BaseModel):
 
 class FixtureSchema(BaseModel):
     football_api_id: int
-    home_team_football_api_id: int
-    away_team_football_api_id: int
     home_team_goals: Optional[int]
     away_team_goals: Optional[int]
     home_team_winner: Optional[bool]

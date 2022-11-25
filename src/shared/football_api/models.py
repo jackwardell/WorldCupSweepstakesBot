@@ -24,6 +24,9 @@ class FootballTeam(TeamSchema):
 
 
 class FootballFixture(FixtureSchema):
+    home_team_football_api_id: int
+    away_team_football_api_id: int
+
     @classmethod
     def from_football_api_response(cls, response: FixturesFixturesResponse) -> FootballFixture:
         fixture = cls(

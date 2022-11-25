@@ -22,6 +22,8 @@ class Participant(UserSchema):
 
 
 class Team(TeamSchema):
+    participant: Participant
+
     @property
     def emoji(self) -> str:
         return COUNTRIES_AND_FLAGS[self.name]
@@ -32,6 +34,9 @@ class Team(TeamSchema):
 
 
 class Fixture(FixtureSchema):
+    home_team: Team
+    away_team: Team
+
     @classmethod
     def from_orm(cls, fixture: FixtureORM) -> Fixture:
         return cls(

@@ -1,44 +1,27 @@
 from __future__ import annotations
 
-from datetime import datetime
-from enum import Enum
-from typing import Optional
-
-from pydantic import BaseModel
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
-from src.shared.bot_api.db import TeamAndParticipantORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
+from src.shared.schemas import FixtureEventSchema
+from src.shared.schemas import FixtureSchema
+from src.shared.schemas import PlayerSchema
+from src.shared.schemas import TeamSchema
+from src.shared.schemas import UserSchema
 
 
-class MatchResultEnum(Enum):
-    W: str = "w"
-    L: str = "l"
-    D: str = "d"
-
-
-class MatchResult(BaseModel):
-    result: MatchResultEnum
-
-
-class Participant(BaseModel):
-    telegram_id: int
-    name: str
-
+class Participant(UserSchema):
     @property
     def tagged_telegram_participant(self) -> str:
-        return f"[{self.name}](tg://user?id={self.telegram_id})"
+        return f"[{self.first_name}](tg://user?id={self.telegram_user_id})"
 
     @classmethod
     def from_orm(cls, participant: ParticipantORM) -> Participant:
         return cls(name=participant.name, telegram_id=participant.telegram_id)
 
 
-class Team(BaseModel):
-    football_api_id: int
-    name: str
-
+class Team(TeamSchema):
     @property
     def emoji(self) -> str:
         return COUNTRIES_AND_FLAGS[self.name]
@@ -48,31 +31,7 @@ class Team(BaseModel):
         return cls(football_api_id=team.football_api_id, name=team.name)
 
 
-class TeamAndParticipant(BaseModel):
-    team: Team
-    participant: Participant
-
-    @classmethod
-    def from_orm(cls, team_and_participant: TeamAndParticipantORM) -> TeamAndParticipant:
-        return cls(team=team_and_participant.team, participant=team_and_participant.participant)
-
-
-class Fixture(BaseModel):
-    id: int
-    football_api_id: str
-    home_team: Team
-    away_team: Team
-    home_participant: Participant
-    away_participant: Participant
-    home_team_goals: Optional[int]
-    away_team_goals: Optional[int]
-    home_team_won: Optional[bool]
-    away_team_won: Optional[bool]
-    kick_off: datetime
-    venue_name: str
-    venue_city: str
-    round: str
-
+class Fixture(FixtureSchema):
     @classmethod
     def from_orm(cls, fixture: FixtureORM) -> Fixture:
         return cls(
@@ -163,3 +122,11 @@ class Fixture(BaseModel):
     @property
     def matching_participants(self) -> bool:
         return self.home_participant.name == self.away_participant.name
+
+
+class Player(PlayerSchema):
+    ...
+
+
+class FixtureEvent(FixtureEventSchema):
+    ...

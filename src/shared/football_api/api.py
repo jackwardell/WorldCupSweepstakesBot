@@ -5,12 +5,12 @@ from functools import lru_cache
 from typing import Dict
 from typing import List
 from typing import Optional
-from typing import Union
 
 import attr
 import requests
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 
@@ -42,11 +42,12 @@ class FootballApi:
     def players_url(self) -> str:
         return "https://api-football-v1.p.rapidapi.com/v3/players"
 
-    def get_params(self) -> Dict[str, Union[int, str]]:
-        return {"league": self.league_id, "season": self.season}
+    @property
+    def fixture_events_url(self) -> str:
+        return "https://api-football-v1.p.rapidapi.com/v3/fixtures/events"
 
     def get_fixtures(self, today_only: bool = True) -> List[FootballFixture]:
-        params = self.get_params()
+        params = {"league": self.league_id, "season": self.season}
         if today_only:
             params["from"] = str(date.today())
             params["to"] = str(date.today())
@@ -58,15 +59,16 @@ class FootballApi:
         return [FootballFixture.from_football_api_response(f) for f in response.json()["response"]]
 
     def get_teams(self) -> List[FootballTeam]:
+        params = {"league": self.league_id, "season": self.season}
         response = requests.get(
             self.teams_url,
-            params=self.get_params(),
+            params=params,
             headers=self.headers,
         )
         return [FootballTeam.from_football_api_response(t) for t in response.json()["response"]]
 
     def get_players(self, page: Optional[int] = None) -> List[FootballPlayer]:
-        params = self.get_params()
+        params = {"league": self.league_id, "season": self.season}
         if page:
             params["page"] = page
         response = requests.get(
@@ -75,6 +77,15 @@ class FootballApi:
             headers=self.headers,
         )
         return [FootballPlayer.from_football_api_response(p) for p in response.json()["response"]]
+
+    def get_fixture_events(self, fixture_football_api_key: int) -> List[FootballFixtureEvent]:
+        params = {"fixture": fixture_football_api_key}
+        response = requests.get(
+            self.fixture_events_url,
+            params=params,
+            headers=self.headers,
+        )
+        return [FootballFixtureEvent.from_football_api_response(e) for e in response.json()["response"]]
 
     # def get_all_players(self, sleep_per_call: Optional[int] = None) -> List[FootballPlayer]:
     #     params = self.get_params()

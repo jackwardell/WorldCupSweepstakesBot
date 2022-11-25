@@ -23,8 +23,8 @@ class MatchResult(BaseModel):
 
 
 class Participant(BaseModel):
-    name: str
     telegram_id: int
+    name: str
 
     @property
     def tagged_telegram_participant(self) -> str:
@@ -36,6 +36,7 @@ class Participant(BaseModel):
 
 
 class Team(BaseModel):
+    football_api_id: int
     name: str
 
     @property
@@ -44,7 +45,7 @@ class Team(BaseModel):
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
-        return cls(name=team.name)
+        return cls(football_api_id=team.football_api_id, name=team.name)
 
 
 class TeamAndParticipant(BaseModel):

@@ -1,4 +1,4 @@
-from datetime import date
+from typing import List
 from typing import Optional
 from typing import TypedDict
 
@@ -104,7 +104,7 @@ class TeamTeamInformationResponse(TypedDict):
 
 
 class PlayerPlayerResponsePlayerBirth(TypedDict):
-    date: date
+    date: str
     place: str
     country: str
 
@@ -195,15 +195,15 @@ class PlayerPlayerResponseStatisticsFouls(TypedDict):
 
 
 class PlayerPlayerResponseStatisticsCards(TypedDict):
-    yellow: int
-    yellowred: int
-    red: int
+    yellow: Optional[int]
+    yellowred: Optional[int]
+    red: Optional[int]
 
 
 class PlayerPlayerResponseStatisticsPenalty(TypedDict):
     won: Optional[int]
     commited: Optional[int]
-    scored: int
+    scored: Optional[int]
     missed: int
     saved: Optional[int]
 
@@ -226,7 +226,7 @@ class PlayerPlayerResponseStatistics(TypedDict):
 
 class PlayerPlayerResponse(TypedDict):
     player: PlayerPlayerResponsePlayer
-    statistics: PlayerPlayerResponseStatistics
+    statistics: List[PlayerPlayerResponseStatistics]
 
 
 class FixturesEventsResponseTime(TypedDict):

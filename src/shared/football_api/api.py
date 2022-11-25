@@ -4,11 +4,14 @@ from datetime import date
 from functools import lru_cache
 from typing import Dict
 from typing import List
+from typing import Optional
+from typing import Union
 
 import attr
 import requests
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 
 
@@ -39,11 +42,11 @@ class FootballApi:
     def players_url(self) -> str:
         return "https://api-football-v1.p.rapidapi.com/v3/players"
 
+    def get_params(self) -> Dict[str, Union[int, str]]:
+        return {"league": self.league_id, "season": self.season}
+
     def get_fixtures(self, today_only: bool = True) -> List[FootballFixture]:
-        params = {
-            "league": self.league_id,
-            "season": self.season,
-        }
+        params = self.get_params()
         if today_only:
             params["from"] = str(date.today())
             params["to"] = str(date.today())
@@ -57,27 +60,44 @@ class FootballApi:
     def get_teams(self) -> List[FootballTeam]:
         response = requests.get(
             self.teams_url,
-            params={"league": self.league_id, "season": self.season},
+            params=self.get_params(),
             headers=self.headers,
         )
         return [FootballTeam.from_response(t) for t in response.json()["response"]]
 
-    def get_players(self) -> List[FootballTeam]:
+    def get_players(self, page: Optional[int] = None) -> List[FootballPlayer]:
+        params = self.get_params()
+        if page:
+            params["page"] = page
         response = requests.get(
             self.players_url,
-            params={"league": self.league_id, "season": self.season},
+            params=params,
             headers=self.headers,
         )
-        players = [FootballTeam.from_response(t) for t in response.json()["response"]]
-        number_of_pages = response.json()["paging"]["total"]
-        for _ in range(number_of_pages):
-            response = requests.get(
-                self.players_url,
-                params={"league": self.league_id, "season": self.season},
-                headers=self.headers,
-            )
-            players.extend([FootballTeam.from_response(t) for t in response.json()["response"]])
-        assert (
-            response.json()["paging"]["current"] == number_of_pages
-        ), f"{response.json()['paging']['current']} != {number_of_pages}"
-        return players
+        return [FootballPlayer.from_response(p) for p in response.json()["response"]]
+
+    # def get_all_players(self, sleep_per_call: Optional[int] = None) -> List[FootballPlayer]:
+    #     params = self.get_params()
+    #     params['page'] = 1
+    #     response = requests.get(
+    #         self.players_url,
+    #         params=params,
+    #         headers=self.headers,
+    #     )
+    #     players = [FootballPlayer.from_response(p) for p in response.json()['response']]
+    #     number_of_pages = response.json()["paging"]["total"]
+    #     for page in range(2, number_of_pages + 1):
+    #         params['page'] = page
+    #         response = requests.get(
+    #             self.players_url,
+    #             params=params,
+    #             headers=self.headers,
+    #         )
+    #         response.raise_for_status()
+    #         players.extend([FootballPlayer.from_response(p) for p in response.json()["response"]])
+    #         if sleep_per_call:
+    #             time.sleep(sleep_per_call)
+    #     assert (
+    #             response.json()["paging"]["current"] == number_of_pages
+    #     ), f"{response.json()['paging']['current']} != {number_of_pages}"
+    #     return players

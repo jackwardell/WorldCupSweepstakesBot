@@ -5,20 +5,26 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
-from src.shared.football_api.responses import FixtureResponse
-from src.shared.football_api.responses import TeamResponse
+from src.shared.football_api.responses import FixturesFixturesResponse
+from src.shared.football_api.responses import PlayerPlayerResponse
+from src.shared.football_api.responses import TeamTeamInformationResponse
 
 
 class FootballTeam(BaseModel):
+    football_api_id: int
     name: str
 
     @classmethod
-    def from_response(cls, response: TeamResponse) -> FootballTeam:
-        return cls(name=response["team"]["name"])
+    def from_response(cls, response: TeamTeamInformationResponse) -> FootballTeam:
+        team = cls(
+            id=response["team"]["id"],
+            name=response["team"]["name"],
+        )
+        return team
 
 
 class FootballFixture(BaseModel):
-    football_api_id: str
+    football_api_id: int
     home_team_name: str
     away_team_name: str
     home_team_goals: Optional[int]
@@ -29,7 +35,6 @@ class FootballFixture(BaseModel):
     venue_city: str
     venue_name: str
     round: str
-
     home_goals_halftime: Optional[int]
     away_goals_halftime: Optional[int]
     home_goals_fulltime: Optional[int]
@@ -40,9 +45,9 @@ class FootballFixture(BaseModel):
     away_goals_penalties: Optional[int]
 
     @classmethod
-    def from_response(cls, response: FixtureResponse) -> FootballFixture:
+    def from_response(cls, response: FixturesFixturesResponse) -> FootballFixture:
         fixture = cls(
-            football_api_id=response["fixture"]["id"],
+            id=response["fixture"]["id"],
             home_team_name=response["teams"]["home"]["name"],
             away_team_name=response["teams"]["away"]["name"],
             home_team_goals=response["goals"]["home"],
@@ -66,8 +71,30 @@ class FootballFixture(BaseModel):
 
 
 class FootballPlayer(BaseModel):
+    football_api_id: int
     first_name: str
     last_name: str
-    football_api_id: int
     date_of_birth: date
     team_name: str
+    team_football_api_id: int
+    yellow_cards: Optional[int]
+    yellow_then_red_cards: Optional[int]
+    red_cards: Optional[int]
+    goals: Optional[int]
+
+    @classmethod
+    def from_response(cls, response: PlayerPlayerResponse) -> FootballPlayer:
+        assert len(response["statistics"]) == 1
+        player = cls(
+            football_api_id=response["player"]["id"],
+            first_name=response["player"]["firstname"],
+            last_name=response["player"]["lastname"],
+            date_of_birth=date.fromisoformat(response["player"]["birth"]["date"]),
+            team_name=response["statistics"][0]["team"]["name"],
+            team_football_api_id=response["statistics"][0]["team"]["id"],
+            yellow_cards=response["statistics"][0]["cards"]["yellow"],
+            yellow_then_red_cards=response["statistics"][0]["cards"]["yellowred"],
+            red_cards=response["statistics"][0]["cards"]["red"],
+            goals=response["statistics"][0]["goals"]["total"],
+        )
+        return player

@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 from datetime import datetime
 
+from src.shared.football_api.responses import FixturesEventsResponse
 from src.shared.football_api.responses import FixturesFixturesResponse
 from src.shared.football_api.responses import PlayerPlayerResponse
 from src.shared.football_api.responses import TeamTeamInformationResponse
@@ -13,26 +14,22 @@ from src.shared.schemas import TeamSchema
 
 
 class FootballTeam(TeamSchema):
-    ...
-
     @classmethod
-    def from_response(cls, response: TeamTeamInformationResponse) -> FootballTeam:
+    def from_football_api_response(cls, response: TeamTeamInformationResponse) -> FootballTeam:
         team = cls(
-            id=response["team"]["id"],
+            football_api_id=response["team"]["id"],
             name=response["team"]["name"],
         )
         return team
 
 
 class FootballFixture(FixtureSchema):
-    ...
-
     @classmethod
-    def from_response(cls, response: FixturesFixturesResponse) -> FootballFixture:
+    def from_football_api_response(cls, response: FixturesFixturesResponse) -> FootballFixture:
         fixture = cls(
-            id=response["fixture"]["id"],
-            home_team_name=response["teams"]["home"]["name"],
-            away_team_name=response["teams"]["away"]["name"],
+            football_api_id=response["fixture"]["id"],
+            home_team_football_api_id=response["teams"]["home"]["name"],
+            away_team_football_api_id=response["teams"]["away"]["name"],
             home_team_goals=response["goals"]["home"],
             away_team_goals=response["goals"]["away"],
             home_team_winner=response["teams"]["home"]["winner"],
@@ -54,10 +51,8 @@ class FootballFixture(FixtureSchema):
 
 
 class FootballPlayer(PlayerSchema):
-    ...
-
     @classmethod
-    def from_response(cls, response: PlayerPlayerResponse) -> FootballPlayer:
+    def from_football_api_response(cls, response: PlayerPlayerResponse) -> FootballPlayer:
         assert len(response["statistics"]) == 1
         player = cls(
             football_api_id=response["player"]["id"],
@@ -75,4 +70,14 @@ class FootballPlayer(PlayerSchema):
 
 
 class FootballFixtureEvent(FixtureEventSchema):
-    ...
+    @classmethod
+    def from_football_api_response(cls, response: FixturesEventsResponse) -> FootballFixtureEvent:
+        fixture_event = cls(
+            time_elapsed_min=response["time"]["elapsed"],
+            time_elapsed_extra_min=response["time"]["extra"],
+            team_football_api_id=response["team"]["id"],
+            player_football_api_id=response["player"]["id"],
+            type=response["type"],
+            detail=response["detail"],
+        )
+        return fixture_event

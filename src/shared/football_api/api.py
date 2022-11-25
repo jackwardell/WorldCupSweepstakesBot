@@ -55,7 +55,7 @@ class FootballApi:
             params=params,
             headers=self.headers,
         )
-        return [FootballFixture.from_response(f) for f in response.json()["response"]]
+        return [FootballFixture.from_football_api_response(f) for f in response.json()["response"]]
 
     def get_teams(self) -> List[FootballTeam]:
         response = requests.get(
@@ -63,7 +63,7 @@ class FootballApi:
             params=self.get_params(),
             headers=self.headers,
         )
-        return [FootballTeam.from_response(t) for t in response.json()["response"]]
+        return [FootballTeam.from_football_api_response(t) for t in response.json()["response"]]
 
     def get_players(self, page: Optional[int] = None) -> List[FootballPlayer]:
         params = self.get_params()
@@ -74,7 +74,7 @@ class FootballApi:
             params=params,
             headers=self.headers,
         )
-        return [FootballPlayer.from_response(p) for p in response.json()["response"]]
+        return [FootballPlayer.from_football_api_response(p) for p in response.json()["response"]]
 
     # def get_all_players(self, sleep_per_call: Optional[int] = None) -> List[FootballPlayer]:
     #     params = self.get_params()

@@ -7,6 +7,7 @@ from typing import List
 import attr
 from sqlalchemy import create_engine
 from sqlalchemy import func
+from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
@@ -17,7 +18,6 @@ from src.shared.bot_api.db import TeamORM
 from src.shared.bot_api.models import Fixture
 from src.shared.bot_api.models import Participant
 from src.shared.bot_api.models import Team
-from src.shared.bot_api.models import TeamAndParticipant
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
@@ -27,11 +27,14 @@ from src.shared.telegram_api.api import get_telegram_api
 from src.shared.telegram_api.api import TelegramApi
 from src.shared.telegram_api.models import TelegramParticipant
 
-engine = create_engine(get_config().SQLALCHEMY_URL)
-
 
 class BotApiError(Exception):
     pass
+
+
+@lru_cache
+def get_engine() -> Engine:
+    return create_engine(get_config().SQLALCHEMY_URL)
 
 
 @lru_cache
@@ -41,7 +44,7 @@ def get_bot_api() -> BotApi:
 
 @attr.s
 class BotApi:
-    session: Session = attr.ib(factory=lambda: Session(engine))
+    session: Session = attr.ib(factory=lambda: Session(get_engine()))
     telegram_api: TelegramApi = attr.ib(factory=get_telegram_api)
     open_weather_map_api: OpenWeatherMapApi = attr.ib(factory=get_open_weather_map_api)
 
@@ -84,9 +87,9 @@ class BotApi:
                 session.rollback()
                 raise BotApiError(e) from e
 
-    def get_teams_and_participants(self) -> List[TeamAndParticipant]:
-        with self.session as session:
-            return [TeamAndParticipant.from_orm(t) for t in session.query(TeamAndParticipantORM).all()]
+    # def get_teams_and_participants(self) -> List[TeamAndParticipant]:
+    #     with self.session as session:
+    #         return [TeamAndParticipant.from_orm(t) for t in session.query(TeamAndParticipantORM).all()]
 
     def save_team_and_participant(self, team_name: str, participant_name: str) -> None:
         with self.session as session:

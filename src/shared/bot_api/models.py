@@ -30,7 +30,7 @@ class Team(TeamSchema):
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
-        return cls(football_api_id=team.football_api_id, name=team.name)
+        return cls(football_api_id=team.football_api_id, participant=team.participant)
 
 
 class Fixture(FixtureSchema):

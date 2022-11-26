@@ -6,7 +6,7 @@ from typing import List
 import attr
 from src.shared.config import get_config
 from src.shared.config import PROJECT_ROOT
-from src.shared.telegram_api.models import TelegramUser
+from src.shared.telegram_api.models import TelegramParticipant
 from telegram import Bot
 from telegram import ParseMode
 from telegram.utils.types import FileInput
@@ -45,6 +45,6 @@ class TelegramApi:
         with open(image_path, "rb") as jpg:
             return self.send_photo(jpg, "🤔", reply_to_message_id=reply_to_message_id)
 
-    def get_users(self) -> List[TelegramUser]:
+    def get_users(self) -> List[TelegramParticipant]:
         administrators = self.bot.get_chat(self.chat_id).get_administrators()
-        return [TelegramUser.from_telegram(a.user) for a in administrators if a.user.first_name != BOT_NAME]
+        return [TelegramParticipant.from_telegram(a.user) for a in administrators if a.user.first_name != BOT_NAME]

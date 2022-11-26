@@ -6,7 +6,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class UserSchema(BaseModel):
+class ParticipantSchema(BaseModel):
     telegram_user_id: int
     first_name: str
 

@@ -6,19 +6,19 @@ from src.shared.bot_api.db import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
 from src.shared.schemas import FixtureEventSchema
 from src.shared.schemas import FixtureSchema
+from src.shared.schemas import ParticipantSchema
 from src.shared.schemas import PlayerSchema
 from src.shared.schemas import TeamSchema
-from src.shared.schemas import UserSchema
 
 
-class Participant(UserSchema):
+class Participant(ParticipantSchema):
     @property
-    def tagged_telegram_participant(self) -> str:
+    def telegram_tag(self) -> str:
         return f"[{self.first_name}](tg://user?id={self.telegram_user_id})"
 
     @classmethod
     def from_orm(cls, participant: ParticipantORM) -> Participant:
-        return cls(name=participant.name, telegram_id=participant.telegram_id)
+        return cls(name=participant.first_name, telegram_id=participant.telegram_user_id)
 
 
 class Team(TeamSchema):
@@ -74,8 +74,8 @@ class Fixture(FixtureSchema):
             venue_city=self.venue_city,
             kick_off=self.kick_off.time(),
             round=self.round,
-            home_participant_tag=self.home_participant.tagged_telegram_participant,
-            away_participant_tag=self.away_participant.tagged_telegram_participant,
+            home_participant_tag=self.home_team.participant.telegram_tag,
+            away_participant_tag=self.away_team.participant.telegram_tag,
         )
         return message
 
@@ -85,26 +85,26 @@ class Fixture(FixtureSchema):
         if self.home_team_won is None and self.away_team_won is None:
             home_team_match_result = "drew with"
             home_team_insult_result = "and"
-            winner_participant_tag = self.home_participant.tagged_telegram_participant
-            loser_participant_tag = self.away_participant.tagged_telegram_participant
+            winner_participant_tag = self.home_participant.telegram_tag
+            loser_participant_tag = self.away_participant.telegram_tag
         elif self.home_team_goals > self.away_team_goals and self.home_team_won:
             home_team_match_result = "beat"
             home_team_insult_result = "and get rekt"
-            winner_participant_tag = self.home_participant.tagged_telegram_participant
-            loser_participant_tag = self.away_participant.tagged_telegram_participant
+            winner_participant_tag = self.home_participant.telegram_tag
+            loser_participant_tag = self.away_participant.telegram_tag
         elif self.away_team_goals > self.home_team_goals and self.away_team_won:
             home_team_match_result = "lost to"
             home_team_insult_result = "and get rekt"
-            winner_participant_tag = self.away_participant.tagged_telegram_participant
-            loser_participant_tag = self.home_participant.tagged_telegram_participant
+            winner_participant_tag = self.away_participant.telegram_tag
+            loser_participant_tag = self.home_participant.telegram_tag
         else:
             raise ValueError("hmmm?")
 
         if self.home_participant.name == self.away_participant.name:
             home_team_insult_result = ""
             first_msg = "Well done/Get rekt"
-            winner_participant_tag = self.away_participant.tagged_telegram_participant
-            loser_participant_tag = self.home_participant.tagged_telegram_participant
+            winner_participant_tag = self.away_participant.telegram_tag
+            loser_participant_tag = self.home_participant.telegram_tag
         message = (
             "🏆 {home_team_name} {home_team_emoji} {home_team_match_result} {away_team_name} {away_team_emoji} "
             "{home_team_goals}-{away_team_goals} ⚽\n"

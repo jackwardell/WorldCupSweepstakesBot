@@ -25,7 +25,7 @@ from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.open_weather_map_api.api import OpenWeatherMapApi
 from src.shared.telegram_api.api import get_telegram_api
 from src.shared.telegram_api.api import TelegramApi
-from src.shared.telegram_api.models import TelegramUser
+from src.shared.telegram_api.models import TelegramParticipant
 
 engine = create_engine(get_config().SQLALCHEMY_URL)
 
@@ -58,7 +58,7 @@ class BotApi:
         with self.session as session:
             return [Participant.from_orm(p) for p in session.query(ParticipantORM).all()]
 
-    def save_participant(self, telegram_user: TelegramUser) -> Participant:
+    def save_participant(self, telegram_user: TelegramParticipant) -> Participant:
         with self.session as session:
             participant = ParticipantORM.from_telegram_user(telegram_user)
             session.add(participant)

@@ -22,8 +22,8 @@ def get_football_api() -> FootballApi:
 
 @attr.s
 class FootballApi:
-    league_id: int = 1
-    season: int = 2022
+    league_id: str = "1"
+    season: str = "2022"
 
     @property
     def headers(self) -> Dict[str, str]:

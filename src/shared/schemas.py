@@ -48,7 +48,6 @@ class PlayerSchema(BaseModel):
     first_name: str
     last_name: str
     date_of_birth: date
-    team_name: str
     team_football_api_id: int
     yellow_cards: Optional[int]
     yellow_then_red_cards: Optional[int]

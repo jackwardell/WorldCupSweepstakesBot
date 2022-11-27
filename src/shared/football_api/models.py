@@ -62,7 +62,6 @@ class FootballPlayer(PlayerSchema):
             first_name=response["player"]["firstname"],
             last_name=response["player"]["lastname"],
             date_of_birth=date.fromisoformat(response["player"]["birth"]["date"]),
-            team_name=response["statistics"][0]["team"]["name"],
             team_football_api_id=response["statistics"][0]["team"]["id"],
             yellow_cards=response["statistics"][0]["cards"]["yellow"],
             yellow_then_red_cards=response["statistics"][0]["cards"]["yellowred"],

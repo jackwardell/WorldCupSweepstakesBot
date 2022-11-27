@@ -5,6 +5,7 @@ import pytest
 import responses
 from src.shared.football_api.api import FootballApi
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 
 
@@ -241,6 +242,7 @@ def test_get_teams(football_api: FootballApi) -> None:
         ),
     ]
     assert route.call_count == 1
+    assert responses.calls[0].request.params == {"league": "1", "season": "2022"}
     assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
     assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"
 
@@ -248,8 +250,8 @@ def test_get_teams(football_api: FootballApi) -> None:
 @pytest.mark.parametrize("page", [None, 2])
 @responses.activate
 def test_get_players(football_api: FootballApi, page: Optional[int]) -> None:
-    responses.get(
-        "https://api-football-v1.p.rapidapi.com/v3/teams",
+    route = responses.get(
+        "https://api-football-v1.p.rapidapi.com/v3/players",
         json={
             "get": "teams",
             "parameters": {"league": "1", "season": "2022"},
@@ -297,13 +299,13 @@ def test_get_players(football_api: FootballApi, page: Optional[int]) -> None:
                             },
                             "substitutes": {"in": 0, "out": 0, "bench": 0},
                             "shots": {"total": None, "on": None},
-                            "goals": {"total": 0, "conceded": None, "assists": None, "saves": None},
+                            "goals": {"total": 1, "conceded": None, "assists": None, "saves": None},
                             "passes": {"total": None, "key": None, "accuracy": None},
                             "tackles": {"total": None, "blocks": None, "interceptions": None},
                             "duels": {"total": None, "won": None},
                             "dribbles": {"attempts": None, "success": None, "past": None},
                             "fouls": {"drawn": None, "committed": None},
-                            "cards": {"yellow": 0, "yellowred": 0, "red": 0},
+                            "cards": {"yellow": 1, "yellowred": 2, "red": 3},
                             "penalty": {"won": None, "commited": None, "scored": None, "missed": None, "saved": None},
                         }
                     ],
@@ -362,3 +364,32 @@ def test_get_players(football_api: FootballApi, page: Optional[int]) -> None:
             ],
         },
     )
+    football_players = football_api.get_players()
+    assert football_players == [
+        FootballPlayer(
+            football_api_id=44843,
+            first_name="Martin Callie",
+            last_name="Boyle",
+            date_of_birth=datetime.date.fromisoformat("1993-04-25"),
+            team_football_api_id=20,
+            yellow_cards=1,
+            yellow_then_red_cards=2,
+            red_cards=3,
+            goals=1,
+        ),
+        FootballPlayer(
+            football_api_id=152654,
+            first_name="Jeremie",
+            last_name="Agyekum Frimpong",
+            date_of_birth=datetime.date.fromisoformat("2000-12-10"),
+            team_football_api_id=1118,
+            yellow_cards=0,
+            yellow_then_red_cards=0,
+            red_cards=0,
+            goals=0,
+        ),
+    ]
+    assert route.call_count == 1
+    assert responses.calls[0].request.params == {"league": "1", "season": "2022"}
+    assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
+    assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"

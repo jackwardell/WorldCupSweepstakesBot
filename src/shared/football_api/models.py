@@ -31,8 +31,8 @@ class FootballFixture(FixtureSchema):
     def from_football_api_response(cls, response: FixturesFixturesResponse) -> FootballFixture:
         fixture = cls(
             football_api_id=response["fixture"]["id"],
-            home_team_football_api_id=response["teams"]["home"]["name"],
-            away_team_football_api_id=response["teams"]["away"]["name"],
+            home_team_football_api_id=response["teams"]["home"]["id"],
+            away_team_football_api_id=response["teams"]["away"]["id"],
             home_team_goals=response["goals"]["home"],
             away_team_goals=response["goals"]["away"],
             home_team_winner=response["teams"]["home"]["winner"],

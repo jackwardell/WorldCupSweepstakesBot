@@ -25,10 +25,9 @@ class FootballApi:
     league_id: int = 1
     season: int = 2022
 
-    headers: Dict[str, str] = {
-        "X-RapidAPI-Key": get_config().RAPID_API_KEY,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
-    }
+    @property
+    def headers(self) -> Dict[str, str]:
+        return {"X-RapidAPI-Key": get_config().RAPID_API_KEY, "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"}
 
     @property
     def fixtures_url(self) -> str:

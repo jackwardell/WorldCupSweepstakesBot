@@ -1,8 +1,10 @@
+import datetime
 from unittest.mock import MagicMock
 
 import pytest
-import requests
+import responses
 from src.shared.football_api.api import FootballApi
+from src.shared.football_api.models import FootballFixture
 
 
 @pytest.fixture
@@ -10,9 +12,17 @@ def football_api() -> FootballApi:
     return FootballApi()
 
 
-def test_get_fixtures(football_api: FootballApi) -> None:
-    requests.get = MagicMock(
-        return_value={
+@pytest.fixture
+def response() -> MagicMock:
+    return MagicMock()
+
+
+@pytest.mark.parametrize("today_only", [True, False])
+@responses.activate
+def test_get_fixtures(football_api: FootballApi, today_only: bool, response: MagicMock) -> None:
+    responses.get(
+        "https://api-football-v1.p.rapidapi.com/v3/fixtures",
+        json={
             "get": "fixtures",
             "parameters": {"league": "1", "from": "2022-11-25", "to": "2022-11-25", "season": "2022"},
             "errors": [],
@@ -104,6 +114,50 @@ def test_get_fixtures(football_api: FootballApi) -> None:
                     },
                 },
             ],
-        }
+        },
     )
-    # football_api.
+    football_fixtures = football_api.get_fixtures(today_only=today_only)
+    assert football_fixtures == [
+        FootballFixture(
+            football_api_id=866682,
+            home_team_football_api_id=767,
+            away_team_football_api_id=22,
+            home_team_goals=0,
+            away_team_goals=2,
+            home_team_winner=False,
+            away_team_winner=True,
+            kick_off=datetime.datetime(2022, 11, 25, 10, 0, tzinfo=datetime.timezone.utc),
+            venue_city="Al Rayyan",
+            venue_name="Ahmed bin Ali Stadium",
+            round="Group Stage - 2",
+            home_goals_halftime=0,
+            away_goals_halftime=0,
+            home_goals_fulltime=0,
+            away_goals_fulltime=2,
+            away_goals_extratime=None,
+            home_goals_extratime=None,
+            home_goals_penalties=None,
+            away_goals_penalties=None,
+        ),
+        FootballFixture(
+            football_api_id=855747,
+            home_team_football_api_id=1569,
+            away_team_football_api_id=13,
+            home_team_goals=1,
+            away_team_goals=3,
+            home_team_winner=False,
+            away_team_winner=True,
+            kick_off=datetime.datetime(2022, 11, 25, 13, 0, tzinfo=datetime.timezone.utc),
+            venue_city="Al-Thumama",
+            venue_name="Al-Thumama Stadium",
+            round="Group Stage - 2",
+            home_goals_halftime=0,
+            away_goals_halftime=1,
+            home_goals_fulltime=1,
+            away_goals_fulltime=3,
+            away_goals_extratime=None,
+            home_goals_extratime=None,
+            home_goals_penalties=None,
+            away_goals_penalties=None,
+        ),
+    ]

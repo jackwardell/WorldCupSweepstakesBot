@@ -14,7 +14,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 
 def is_testing() -> bool:
-    return os.environ["TESTING"] == "true"
+    return os.getenv("TESTING") == "true"
 
 
 @lru_cache

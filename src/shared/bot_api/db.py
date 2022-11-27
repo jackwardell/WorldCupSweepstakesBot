@@ -15,15 +15,12 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
-from src.shared.schemas import FixtureSchema
-from src.shared.schemas import ParticipantSchema
-from src.shared.schemas import TeamSchema
 from src.shared.telegram_api.models import TelegramParticipant
 
 Base = declarative_base()
 
 
-class ParticipantORM(Base, ParticipantSchema):
+class ParticipantORM(Base):
     __tablename__ = "participant"
 
     telegram_user_id: int = Column(BigInteger, primary_key=True, nullable=False)
@@ -33,10 +30,10 @@ class ParticipantORM(Base, ParticipantSchema):
 
     @classmethod
     def from_telegram_user(cls, telegram_user: TelegramParticipant) -> ParticipantORM:
-        return cls(name=telegram_user.first_name, telegram_id=telegram_user.id)
+        return cls(name=telegram_user.first_name, telegram_id=telegram_user.telegram_user_id)
 
 
-class TeamORM(Base, TeamSchema):
+class TeamORM(Base):
     __tablename__ = "team"
 
     football_api_id: int = Column(Integer, primary_key=True, nullable=False)
@@ -52,25 +49,29 @@ class TeamORM(Base, TeamSchema):
 class TeamAndParticipantORM(Base):
     __tablename__ = "team_and_participant"
 
-    team_football_api_id: int = Column(Integer, primary_key=True, nullable=False)
-    participant_telegram_user_id: int = Column(BigInteger, primary_key=True, nullable=False)
+    team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), primary_key=True, nullable=False)
+    participant_telegram_user_id: int = Column(
+        BigInteger, ForeignKey("participant.telegram_user_id"), primary_key=True, nullable=False
+    )
 
-    team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
-    participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
+    # team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
+    # participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
 
-    __table_args__ = (UniqueConstraint("team_name", "participant_name", name="one_team_per_person"),)
+    __table_args__ = (
+        UniqueConstraint("team_football_api_id", "participant_telegram_user_id", name="one_team_per_participant"),
+    )
 
     @classmethod
     def from_team_name_and_participant_name(cls, team_name: str, participant_name: str) -> TeamORM:
         return cls(team_name=team_name, participant_name=participant_name)
 
 
-class FixtureORM(Base, FixtureSchema):
+class FixtureORM(Base):
     __tablename__ = "fixture"
 
     football_api_id: str = Column(Integer, primary_key=True, nullable=False)
-    home_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
-    away_team_name: str = Column(String, ForeignKey("team.name"), nullable=False)
+    home_team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=False)
+    away_team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=False)
     home_team_goals: Optional[int] = Column(Integer, nullable=True)
     away_team_goals: Optional[int] = Column(Integer, nullable=True)
     home_team_won: Optional[bool] = Column(Boolean, nullable=True)

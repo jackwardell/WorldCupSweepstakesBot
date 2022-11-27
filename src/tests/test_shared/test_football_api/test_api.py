@@ -1,9 +1,11 @@
 import datetime
+from typing import Optional
 
 import pytest
 import responses
 from src.shared.football_api.api import FootballApi
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballTeam
 
 
 @pytest.fixture
@@ -14,11 +16,15 @@ def football_api() -> FootballApi:
 @pytest.mark.parametrize("today_only", [True, False])
 @responses.activate
 def test_get_fixtures(football_api: FootballApi, today_only: bool) -> None:
+    params = {"league": "1", "season": "2022"}
+    if today_only:
+        params["from"] = str(datetime.date.today())
+        params["to"] = str(datetime.date.today())
     route = responses.get(
         "https://api-football-v1.p.rapidapi.com/v3/fixtures",
         json={
             "get": "fixtures",
-            "parameters": {"league": "1", "from": "2022-11-25", "to": "2022-11-25", "season": "2022"},
+            "parameters": params,
             "errors": [],
             "results": 4,
             "paging": {"current": 1, "total": 1},
@@ -167,3 +173,192 @@ def test_get_fixtures(football_api: FootballApi, today_only: bool) -> None:
         assert responses.calls[0].request.params == {"league": "1", "season": "2022"}
     assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
     assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"
+
+
+@responses.activate
+def test_get_teams(football_api: FootballApi) -> None:
+    route = responses.get(
+        "https://api-football-v1.p.rapidapi.com/v3/teams",
+        json={
+            "get": "teams",
+            "parameters": {"league": "1", "season": "2022"},
+            "errors": [],
+            "results": 4,
+            "paging": {"current": 1, "total": 1},
+            "response": [
+                {
+                    "team": {
+                        "id": 2382,
+                        "name": "Ecuador",
+                        "code": "ECU",
+                        "country": "Ecuador",
+                        "founded": 1925,
+                        "national": True,
+                        "logo": "https://media.api-sports.io/football/teams/2382.png",
+                    },
+                    "venue": {
+                        "id": 465,
+                        "name": "Estadio Olímpico Atahualpa",
+                        "address": "Avenida 6 de Diciembre y Avenida Naciones Unidas",
+                        "city": "Quito",
+                        "capacity": 40958,
+                        "surface": "grass",
+                        "image": "https://media.api-sports.io/football/venues/465.png",
+                    },
+                },
+                {
+                    "team": {
+                        "id": 2384,
+                        "name": "USA",
+                        "code": "USA",
+                        "country": "USA",
+                        "founded": 1913,
+                        "national": True,
+                        "logo": "https://media.api-sports.io/football/teams/2384.png",
+                    },
+                    "venue": {
+                        "id": 2855,
+                        "name": "Robert F. Kennedy Memorial Stadium",
+                        "address": "2400 East Capitol Street Southeast",
+                        "city": "Washington, District of Columbia",
+                        "capacity": 56692,
+                        "surface": "grass",
+                        "image": "https://media.api-sports.io/football/venues/2855.png",
+                    },
+                },
+            ],
+        },
+    )
+    football_teams = football_api.get_teams()
+    assert football_teams == [
+        FootballTeam(
+            football_api_id=2382,
+            name="Ecuador",
+        ),
+        FootballTeam(
+            football_api_id=2384,
+            name="USA",
+        ),
+    ]
+    assert route.call_count == 1
+    assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
+    assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"
+
+
+@pytest.mark.parametrize("page", [None, 2])
+@responses.activate
+def test_get_players(football_api: FootballApi, page: Optional[int]) -> None:
+    responses.get(
+        "https://api-football-v1.p.rapidapi.com/v3/teams",
+        json={
+            "get": "teams",
+            "parameters": {"league": "1", "season": "2022"},
+            "errors": [],
+            "results": 4,
+            "paging": {"current": 1, "total": 1},
+            "response": [
+                {
+                    "player": {
+                        "id": 44843,
+                        "name": "M. Boyle",
+                        "firstname": "Martin Callie",
+                        "lastname": "Boyle",
+                        "age": 29,
+                        "birth": {"date": "1993-04-25", "place": "Aberdeen", "country": "Scotland"},
+                        "nationality": "Australia",
+                        "height": "172 cm",
+                        "weight": "66 kg",
+                        "injured": False,
+                        "photo": "https://media.api-sports.io/football/players/44843.png",
+                    },
+                    "statistics": [
+                        {
+                            "team": {
+                                "id": 20,
+                                "name": "Australia",
+                                "logo": "https://media.api-sports.io/football/teams/20.png",
+                            },
+                            "league": {
+                                "id": 1,
+                                "name": "World Cup",
+                                "country": "World",
+                                "logo": "https://media.api-sports.io/football/leagues/1.png",
+                                "flag": None,
+                                "season": 2022,
+                            },
+                            "games": {
+                                "appearences": 0,
+                                "lineups": 0,
+                                "minutes": 0,
+                                "number": None,
+                                "position": "Attacker",
+                                "rating": None,
+                                "captain": False,
+                            },
+                            "substitutes": {"in": 0, "out": 0, "bench": 0},
+                            "shots": {"total": None, "on": None},
+                            "goals": {"total": 0, "conceded": None, "assists": None, "saves": None},
+                            "passes": {"total": None, "key": None, "accuracy": None},
+                            "tackles": {"total": None, "blocks": None, "interceptions": None},
+                            "duels": {"total": None, "won": None},
+                            "dribbles": {"attempts": None, "success": None, "past": None},
+                            "fouls": {"drawn": None, "committed": None},
+                            "cards": {"yellow": 0, "yellowred": 0, "red": 0},
+                            "penalty": {"won": None, "commited": None, "scored": None, "missed": None, "saved": None},
+                        }
+                    ],
+                },
+                {
+                    "player": {
+                        "id": 152654,
+                        "name": "J. Frimpong",
+                        "firstname": "Jeremie",
+                        "lastname": "Agyekum Frimpong",
+                        "age": 22,
+                        "birth": {"date": "2000-12-10", "place": "Amsterdam", "country": "Netherlands"},
+                        "nationality": "Netherlands",
+                        "height": "171 cm",
+                        "weight": "63 kg",
+                        "injured": False,
+                        "photo": "https://media.api-sports.io/football/players/152654.png",
+                    },
+                    "statistics": [
+                        {
+                            "team": {
+                                "id": 1118,
+                                "name": "Netherlands",
+                                "logo": "https://media.api-sports.io/football/teams/1118.png",
+                            },
+                            "league": {
+                                "id": 1,
+                                "name": "World Cup",
+                                "country": "World",
+                                "logo": "https://media.api-sports.io/football/leagues/1.png",
+                                "flag": None,
+                                "season": 2022,
+                            },
+                            "games": {
+                                "appearences": 0,
+                                "lineups": 0,
+                                "minutes": 0,
+                                "number": None,
+                                "position": "Defender",
+                                "rating": None,
+                                "captain": False,
+                            },
+                            "substitutes": {"in": 0, "out": 0, "bench": 2},
+                            "shots": {"total": None, "on": None},
+                            "goals": {"total": 0, "conceded": 0, "assists": None, "saves": None},
+                            "passes": {"total": None, "key": None, "accuracy": None},
+                            "tackles": {"total": None, "blocks": None, "interceptions": None},
+                            "duels": {"total": None, "won": None},
+                            "dribbles": {"attempts": None, "success": None, "past": None},
+                            "fouls": {"drawn": None, "committed": None},
+                            "cards": {"yellow": 0, "yellowred": 0, "red": 0},
+                            "penalty": {"won": None, "commited": None, "scored": 0, "missed": 0, "saved": None},
+                        }
+                    ],
+                },
+            ],
+        },
+    )

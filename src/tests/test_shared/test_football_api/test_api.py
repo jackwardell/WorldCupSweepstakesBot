@@ -1,5 +1,4 @@
 import datetime
-from unittest.mock import MagicMock
 
 import pytest
 import responses
@@ -14,8 +13,8 @@ def football_api() -> FootballApi:
 
 @pytest.mark.parametrize("today_only", [True, False])
 @responses.activate
-def test_get_fixtures(football_api: FootballApi, today_only: bool, response: MagicMock) -> None:
-    responses.get(
+def test_get_fixtures(football_api: FootballApi, today_only: bool) -> None:
+    route = responses.get(
         "https://api-football-v1.p.rapidapi.com/v3/fixtures",
         json={
             "get": "fixtures",
@@ -156,3 +155,15 @@ def test_get_fixtures(football_api: FootballApi, today_only: bool, response: Mag
             away_goals_penalties=None,
         ),
     ]
+    assert route.call_count == 1
+    if today_only:
+        assert responses.calls[0].request.params == {
+            "league": "1",
+            "season": "2022",
+            "to": str(datetime.date.today()),
+            "from": str(datetime.date.today()),
+        }
+    else:
+        assert responses.calls[0].request.params == {"league": "1", "season": "2022"}
+    assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
+    assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"

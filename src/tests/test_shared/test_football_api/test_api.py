@@ -12,11 +12,6 @@ def football_api() -> FootballApi:
     return FootballApi()
 
 
-@pytest.fixture
-def response() -> MagicMock:
-    return MagicMock()
-
-
 @pytest.mark.parametrize("today_only", [True, False])
 @responses.activate
 def test_get_fixtures(football_api: FootballApi, today_only: bool, response: MagicMock) -> None:

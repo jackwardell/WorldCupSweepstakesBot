@@ -3,3 +3,4 @@
 *.idea/*
 *pycache*
 *.pyc
+*.DS_Store

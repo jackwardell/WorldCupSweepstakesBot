@@ -5,8 +5,10 @@ import pytest
 import responses
 from src.shared.football_api.api import FootballApi
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
+from src.shared.schemas import FixtureEventType
 
 
 @pytest.fixture
@@ -391,5 +393,91 @@ def test_get_players(football_api: FootballApi, page: Optional[int]) -> None:
     ]
     assert route.call_count == 1
     assert responses.calls[0].request.params == {"league": "1", "season": "2022"}
+    assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
+    assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"
+
+
+@responses.activate
+def test_get_fixture_events(football_api: FootballApi) -> None:
+    route = responses.get(
+        "https://api-football-v1.p.rapidapi.com/v3/fixtures/events",
+        json={
+            "get": "fixtures/events",
+            "parameters": {"fixture": "11111"},
+            "errors": [],
+            "results": 11,
+            "paging": {"current": 1, "total": 1},
+            "response": [
+                {
+                    "time": {"elapsed": 11, "extra": None},
+                    "team": {
+                        "id": 163,
+                        "name": "Borussia Monchengladbach",
+                        "logo": "https://media.api-sports.io/football/teams/163.png",
+                    },
+                    "player": {"id": 25637, "name": "C. Kramer"},
+                    "assist": {"id": 25630, "name": "T. Jantschke"},
+                    "type": "subst",
+                    "detail": "Substitution 1",
+                    "comments": None,
+                },
+                {
+                    "time": {"elapsed": 31, "extra": None},
+                    "team": {
+                        "id": 157,
+                        "name": "Bayern Munich",
+                        "logo": "https://media.api-sports.io/football/teams/157.png",
+                    },
+                    "player": {"id": 519, "name": "Corentin Tolisso"},
+                    "assist": {"id": None, "name": None},
+                    "type": "Card",
+                    "detail": "Yellow Card",
+                    "comments": None,
+                },
+                {
+                    "time": {"elapsed": 90, "extra": 1},
+                    "team": {
+                        "id": 163,
+                        "name": "Borussia Monchengladbach",
+                        "logo": "https://media.api-sports.io/football/teams/163.png",
+                    },
+                    "player": {"id": 2929, "name": "T. Hazard"},
+                    "assist": {"id": None, "name": None},
+                    "type": "Goal",
+                    "detail": "Penalty",
+                    "comments": None,
+                },
+            ],
+        },
+    )
+    football_fixture_events = football_api.get_fixture_events(fixture_football_api_key=11111)
+    assert football_fixture_events == [
+        FootballFixtureEvent(
+            time_elapsed_min=11,
+            time_elapsed_extra_min=None,
+            team_football_api_id=163,
+            player_football_api_id=25637,
+            type=FixtureEventType.SUBST,
+            detail="Substitution 1",
+        ),
+        FootballFixtureEvent(
+            time_elapsed_min=31,
+            time_elapsed_extra_min=None,
+            team_football_api_id=157,
+            player_football_api_id=519,
+            type=FixtureEventType.CARD,
+            detail="Yellow Card",
+        ),
+        FootballFixtureEvent(
+            time_elapsed_min=90,
+            time_elapsed_extra_min=1,
+            team_football_api_id=163,
+            player_football_api_id=2929,
+            type=FixtureEventType.GOAL,
+            detail="Penalty",
+        ),
+    ]
+    assert route.call_count == 1
+    assert responses.calls[0].request.params == {"fixture": "11111"}
     assert responses.calls[0].request.headers["X-RapidAPI-Key"] == "test3"
     assert responses.calls[0].request.headers["X-RapidAPI-Host"] == "api-football-v1.p.rapidapi.com"

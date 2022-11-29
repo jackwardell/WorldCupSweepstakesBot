@@ -7,4 +7,4 @@ from telegram import User
 class TelegramParticipant(ParticipantSchema):
     @classmethod
     def from_telegram(cls, user: User) -> TelegramParticipant:
-        return cls(id=user.id, first_name=user.first_name)
+        return cls(telegram_user_id=user.id, first_name=user.first_name)

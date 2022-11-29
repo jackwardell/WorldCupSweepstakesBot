@@ -18,7 +18,7 @@ class Participant(ParticipantSchema):
 
     @classmethod
     def from_orm(cls, participant: ParticipantORM) -> Participant:
-        return cls(name=participant.first_name, telegram_id=participant.telegram_user_id)
+        return cls(first_name=participant.first_name, telegram_user_id=participant.telegram_user_id)
 
 
 class Team(TeamSchema):

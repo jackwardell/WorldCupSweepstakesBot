@@ -26,11 +26,13 @@ class ParticipantORM(Base):
     telegram_user_id: int = Column(BigInteger, primary_key=True, nullable=False)
     first_name: str = Column(String, nullable=False)
 
-    team: TeamORM = relationship("TeamAndParticipantORM", back_populates="participant", uselist=False)
+    team: TeamORM = relationship(
+        "TeamORM", secondary="team_drawn_by_participant", back_populates="participant", uselist=False
+    )
 
     @classmethod
     def from_telegram_user(cls, telegram_user: TelegramParticipant) -> ParticipantORM:
-        return cls(name=telegram_user.first_name, telegram_id=telegram_user.telegram_user_id)
+        return cls(first_name=telegram_user.first_name, telegram_user_id=telegram_user.telegram_user_id)
 
 
 class TeamORM(Base):
@@ -39,15 +41,17 @@ class TeamORM(Base):
     football_api_id: int = Column(Integer, primary_key=True, nullable=False)
     name: str = Column(String, nullable=False)
 
-    participant: ParticipantORM = relationship("TeamAndParticipantORM", back_populates="team", uselist=False)
+    participant: ParticipantORM = relationship(
+        "ParticipantORM", secondary="team_drawn_by_participant", back_populates="team", uselist=False
+    )
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> TeamORM:
         return cls(name=football_team.name)
 
 
-class TeamAndParticipantORM(Base):
-    __tablename__ = "team_and_participant"
+class TeamDrawnByParticipantORM(Base):
+    __tablename__ = "team_drawn_by_participant"
 
     team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), primary_key=True, nullable=False)
     participant_telegram_user_id: int = Column(

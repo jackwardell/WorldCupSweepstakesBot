@@ -87,17 +87,15 @@ class BotApi:
                 session.rollback()
                 raise BotApiError(e) from e
 
-    # def get_teams_and_participants(self) -> List[TeamAndParticipant]:
-    #     with self.session as session:
-    #         return [TeamAndParticipant.from_orm(t) for t in session.query(TeamDrawnByParticipantORM).all()]
-
-    def save_team_and_participant(self, team_name: str, participant_name: str) -> None:
+    def save_team_drawn_by_participant(self, team_football_api_id: int, participant_telegram_user_id: int) -> None:
         with self.session as session:
-            team_and_participant = TeamDrawnByParticipantORM.from_team_name_and_participant_name(
-                team_name=team_name,
-                participant_name=participant_name,
+            team_drawn_by_participant = (
+                TeamDrawnByParticipantORM.from_team_football_api_id_and_participant_telegram_user_id(
+                    team_football_api_id=team_football_api_id,
+                    participant_telegram_user_id=participant_telegram_user_id,
+                )
             )
-            session.add(team_and_participant)
+            session.add(team_drawn_by_participant)
             try:
                 session.commit()
                 return

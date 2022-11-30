@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
 from src.shared.bot_api.db import TeamORM
@@ -22,7 +24,7 @@ class Participant(ParticipantSchema):
 
 
 class Team(TeamSchema):
-    participant: Participant
+    participant: Optional[Participant]
 
     @property
     def emoji(self) -> str:
@@ -30,7 +32,7 @@ class Team(TeamSchema):
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
-        return cls(football_api_id=team.football_api_id, participant=team.participant)
+        return cls(football_api_id=team.football_api_id, name=team.name, participant=team.participant)
 
 
 class Fixture(FixtureSchema):

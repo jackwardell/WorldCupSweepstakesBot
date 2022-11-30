@@ -66,8 +66,14 @@ class TeamDrawnByParticipantORM(Base):
     )
 
     @classmethod
-    def from_team_name_and_participant_name(cls, team_name: str, participant_name: str) -> TeamORM:
-        return cls(team_name=team_name, participant_name=participant_name)
+    def from_team_football_api_id_and_participant_telegram_user_id(
+        cls,
+        team_football_api_id: int,
+        participant_telegram_user_id: int,
+    ) -> TeamORM:
+        return cls(
+            team_football_api_id=team_football_api_id, participant_telegram_user_id=participant_telegram_user_id
+        )
 
 
 class FixtureORM(Base):

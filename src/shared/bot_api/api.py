@@ -11,9 +11,9 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
+from src.shared.bot_api.db import DrawMappingORM
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
-from src.shared.bot_api.db import TeamDrawnByParticipantORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.bot_api.models import Fixture
 from src.shared.bot_api.models import Participant
@@ -89,11 +89,9 @@ class BotApi:
 
     def save_team_drawn_by_participant(self, team_football_api_id: int, participant_telegram_user_id: int) -> None:
         with self.session as session:
-            team_drawn_by_participant = (
-                TeamDrawnByParticipantORM.from_team_football_api_id_and_participant_telegram_user_id(
-                    team_football_api_id=team_football_api_id,
-                    participant_telegram_user_id=participant_telegram_user_id,
-                )
+            team_drawn_by_participant = DrawMappingORM.from_team_football_api_id_and_participant_telegram_user_id(
+                team_football_api_id=team_football_api_id,
+                participant_telegram_user_id=participant_telegram_user_id,
             )
             session.add(team_drawn_by_participant)
             try:

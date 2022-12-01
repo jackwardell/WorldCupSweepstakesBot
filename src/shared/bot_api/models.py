@@ -32,7 +32,11 @@ class Team(TeamSchema):
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
-        return cls(football_api_id=team.football_api_id, name=team.name, participant=team.participant)
+        return cls(
+            football_api_id=team.football_api_id,
+            name=team.name,
+            participant=Participant.from_orm(team.draw_mapping.participant) if team.draw_mapping else None,
+        )
 
 
 class Fixture(FixtureSchema):

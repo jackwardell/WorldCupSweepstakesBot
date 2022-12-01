@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import List
 from typing import Optional
 
 from sqlalchemy import BigInteger
@@ -26,8 +27,10 @@ class ParticipantORM(Base):
     telegram_user_id: int = Column(BigInteger, primary_key=True, nullable=False)
     first_name: str = Column(String, nullable=False)
 
-    team: TeamORM = relationship(
-        "TeamORM", secondary="team_drawn_by_participant", back_populates="participant", uselist=False
+    draw_mappings: List[DrawMappingORM] = relationship(
+        "DrawMappingORM",
+        back_populates="participant",
+        uselist=True,
     )
 
     @classmethod
@@ -41,8 +44,10 @@ class TeamORM(Base):
     football_api_id: int = Column(Integer, primary_key=True, nullable=False)
     name: str = Column(String, nullable=False)
 
-    participant: ParticipantORM = relationship(
-        "ParticipantORM", secondary="team_drawn_by_participant", back_populates="team", uselist=False
+    draw_mapping: DrawMappingORM = relationship(
+        "DrawMappingORM",
+        back_populates="team",
+        uselist=False,
     )
 
     @classmethod
@@ -50,16 +55,24 @@ class TeamORM(Base):
         return cls(name=football_team.name)
 
 
-class TeamDrawnByParticipantORM(Base):
-    __tablename__ = "team_drawn_by_participant"
+class DrawMappingORM(Base):
+    __tablename__ = "draw_mapping"
 
     team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), primary_key=True, nullable=False)
     participant_telegram_user_id: int = Column(
         BigInteger, ForeignKey("participant.telegram_user_id"), primary_key=True, nullable=False
     )
 
-    # team: TeamORM = relationship("TeamORM", back_populates="participant", uselist=False)
-    # participant: ParticipantORM = relationship("ParticipantORM", back_populates="team", uselist=False)
+    team: TeamORM = relationship(
+        "TeamORM",
+        back_populates="draw_mapping",
+        uselist=False,
+    )
+    participant: ParticipantORM = relationship(
+        "ParticipantORM",
+        back_populates="draw_mappings",
+        uselist=False,
+    )
 
     __table_args__ = (
         UniqueConstraint("team_football_api_id", "participant_telegram_user_id", name="one_team_per_participant"),
@@ -72,7 +85,8 @@ class TeamDrawnByParticipantORM(Base):
         participant_telegram_user_id: int,
     ) -> TeamORM:
         return cls(
-            team_football_api_id=team_football_api_id, participant_telegram_user_id=participant_telegram_user_id
+            team_football_api_id=team_football_api_id,
+            participant_telegram_user_id=participant_telegram_user_id,
         )
 
 

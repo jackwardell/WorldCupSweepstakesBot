@@ -171,5 +171,8 @@ class BotApi:
 
     def save_player(self, football_player: FootballPlayer) -> None:
         with self.session as session:
-            session.add(PlayerORM.from_football_player(football_player))
-            session.commit()
+            try:
+                session.add(PlayerORM.from_football_player(football_player))
+                session.commit()
+            except IntegrityError:
+                session.rollback()

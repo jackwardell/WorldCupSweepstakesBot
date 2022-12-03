@@ -81,24 +81,28 @@ class FootballApi:
 
     def get_all_players(self) -> List[FootballPlayer]:
         current_page = 1
+        end_page = 1_000_000
         players = []
-        params = {"league": self.league_id, "season": self.season, "page": current_page}
-        response = requests.get(
-            self.players_url,
-            params=params,
-            headers=self.headers,
-        )
-        players.extend([FootballPlayer.from_football_api_response(p) for p in response.json()["response"]])
-        end_page = response.json()["paging"]["total"]
+        # params = {"league": self.league_id, "season": self.season, "page": current_page}
+        # response = requests.get(
+        #     self.players_url,
+        #     params=params,
+        #     headers=self.headers,
+        # )
+        # players.extend([FootballPlayer.from_football_api_response(p) for p in response.json()["response"]])
+        # end_page = response.json()["paging"]["total"]
         while current_page <= end_page:
-            current_page += 1
             params = {"league": self.league_id, "season": self.season, "page": current_page}
             response = requests.get(
                 self.players_url,
                 params=params,
                 headers=self.headers,
             )
-            players.extend([FootballPlayer.from_football_api_response(p) for p in response.json()["response"]])
+            print(current_page, end_page)
+            response_json = response.json()
+            end_page = response_json["paging"]["total"]
+            players.extend([FootballPlayer.from_football_api_response(p) for p in response_json["response"]])
+            current_page += 1
             time.sleep(2)
         return players
 

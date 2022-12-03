@@ -67,6 +67,7 @@ class PlayerSchema(BaseModel):
 
 
 class FixtureEventSchema(BaseModel):
+    fixture_football_api_id: int
     time_elapsed_min: int
     time_elapsed_extra_min: Optional[int]
     team_football_api_id: int

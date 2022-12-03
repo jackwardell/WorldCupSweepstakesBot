@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import date
 from datetime import datetime
 
-from src.shared.football_api.responses import FixturesEventsResponse
 from src.shared.football_api.responses import FixturesFixturesResponse
+from src.shared.football_api.responses import FootballApiFixtureEventsResponse
 from src.shared.football_api.responses import PlayerPlayerResponse
 from src.shared.football_api.responses import TeamTeamInformationResponse
 from src.shared.schemas import FixtureEventSchema
@@ -73,13 +73,13 @@ class FootballPlayer(PlayerSchema):
 
 class FootballFixtureEvent(FixtureEventSchema):
     @classmethod
-    def from_football_api_response(cls, response: FixturesEventsResponse) -> FootballFixtureEvent:
+    def from_football_api_response(cls, response: FootballApiFixtureEventsResponse) -> FootballFixtureEvent:
         fixture_event = cls(
-            time_elapsed_min=response["time"]["elapsed"],
-            time_elapsed_extra_min=response["time"]["extra"],
-            team_football_api_id=response["team"]["id"],
-            player_football_api_id=response["player"]["id"],
-            type=response["type"],
-            detail=response["detail"],
+            time_elapsed_min=response["response"]["time"]["elapsed"],
+            time_elapsed_extra_min=response["response"]["time"]["extra"],
+            team_football_api_id=response["response"]["team"]["id"],
+            player_football_api_id=response["response"]["player"]["id"],
+            type=response["response"]["type"],
+            detail=response["response"]["detail"],
         )
         return fixture_event

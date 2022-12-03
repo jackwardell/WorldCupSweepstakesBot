@@ -149,7 +149,8 @@ class FixtureORM(Base):
 class FixtureEventORM(Base):
     __tablename__ = "fixture_event"
 
-    id: int = Column(Integer, primary_key=True, nullable=False)
+    id: int = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    fixture_football_api_id = Column(Integer, ForeignKey("fixture.football_api_id"), nullable=False)
     time_elapsed_min: int = Column(Integer, nullable=False)
     time_elapsed_extra_min: Optional[int] = Column(Integer, nullable=True)
     team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=False)

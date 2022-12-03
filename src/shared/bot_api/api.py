@@ -76,6 +76,10 @@ class BotApi:
         with self.session as session:
             return [Team.from_orm(t) for t in session.query(TeamORM).all()]
 
+    def get_team(self, football_api_id: int) -> Team:
+        with self.session as session:
+            return Team.from_orm(session.query(TeamORM).filter(TeamORM.football_api_id == football_api_id).one())
+
     def save_team(self, football_team: FootballTeam) -> Team:
         with self.session as session:
             team = TeamORM.from_football_team(football_team)

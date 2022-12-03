@@ -282,3 +282,15 @@ class FootballApiBaseResponse(TypedDict):
 
 class FootballApiFixtureEventsResponse(FootballApiBaseResponse):
     response: FixturesEventsResponse
+
+
+class FootballApiFixtureResponse(FootballApiBaseResponse):
+    response: FixturesFixturesResponse
+
+
+class FootballApiPlayerResponse(FootballApiBaseResponse):
+    response: PlayerPlayerResponse
+
+
+class FootballApiTeamResponse(FootballApiBaseResponse):
+    response: TeamTeamInformationResponse

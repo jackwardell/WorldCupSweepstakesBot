@@ -17,6 +17,7 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 from src.shared.telegram_api.models import TelegramParticipant
 
@@ -163,6 +164,20 @@ class PlayerORM(Base):
     yellow_then_red_cards: Optional[int] = Column(Integer, nullable=True)
     red_cards: Optional[int] = Column(Integer, nullable=True)
     goals: Optional[int] = Column(Integer, nullable=True)
+
+    @classmethod
+    def from_football_player(cls, football_player: FootballPlayer) -> PlayerORM:
+        return cls(
+            football_api_id=football_player.football_api_id,
+            first_name=football_player.first_name,
+            last_name=football_player.last_name,
+            date_of_birth=football_player.date_of_birth,
+            team_football_api_id=football_player.team_football_api_id,
+            yellow_cards=football_player.yellow_cards,
+            yellow_then_red_cards=football_player.yellow_then_red_cards,
+            red_cards=football_player.red_cards,
+            goals=football_player.goals,
+        )
 
 
 class SweepstakeCategoryORM(Base):

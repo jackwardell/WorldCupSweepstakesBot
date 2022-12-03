@@ -14,6 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from src.shared.bot_api.db import DrawMappingORM
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
+from src.shared.bot_api.db import PlayerORM
 from src.shared.bot_api.db import SweepstakeCategoryORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.bot_api.models import Fixture
@@ -21,6 +22,7 @@ from src.shared.bot_api.models import Participant
 from src.shared.bot_api.models import Team
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.open_weather_map_api.api import OpenWeatherMapApi
@@ -161,3 +163,8 @@ class BotApi:
                 )
             )
         session.commit()
+
+    def save_player(self, football_player: FootballPlayer) -> None:
+        with self.session as session:
+            session.add(PlayerORM.from_football_player(football_player))
+            session.commit()

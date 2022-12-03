@@ -19,6 +19,7 @@ from src.shared.bot_api.db import SweepstakeCategoryORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.bot_api.models import Fixture
 from src.shared.bot_api.models import Participant
+from src.shared.bot_api.models import Player
 from src.shared.bot_api.models import Team
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
@@ -163,6 +164,10 @@ class BotApi:
                 )
             )
         session.commit()
+
+    def get_players(self) -> List[Player]:
+        with self.session as session:
+            return [Player.from_orm(p) for p in session.query(PlayerORM).all()]
 
     def save_player(self, football_player: FootballPlayer) -> None:
         with self.session as session:

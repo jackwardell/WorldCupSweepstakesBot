@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python3 /root/WorldCupSweepstakesBot/src/crons/ingest_assets/ingest_assets.py
+/root/WorldCupSweepstakesBot/venv/bin/python /root/WorldCupSweepstakesBot/src/crons/ingest_assets

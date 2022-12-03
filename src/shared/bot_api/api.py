@@ -14,6 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from src.shared.bot_api.db import DrawMappingORM
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
+from src.shared.bot_api.db import SweepstakeCategoryORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.bot_api.models import Fixture
 from src.shared.bot_api.models import Participant
@@ -23,6 +24,7 @@ from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballTeam
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
 from src.shared.open_weather_map_api.api import OpenWeatherMapApi
+from src.shared.schemas import SweepstakeCategoryEnum
 from src.shared.telegram_api.api import get_telegram_api
 from src.shared.telegram_api.api import TelegramApi
 from src.shared.telegram_api.models import TelegramParticipant
@@ -143,3 +145,19 @@ class BotApi:
                 session.add(fixture)
                 session.commit()
             return Fixture.from_orm(fixture)
+
+    def save_sweepstake_category(
+        self,
+        sweepstake_category_enum: SweepstakeCategoryEnum,
+        sweepstake_category_name: str,
+        sweepstake_category_reward_amount: int,
+    ) -> None:
+        with self.session as session:
+            session.add(
+                SweepstakeCategoryORM(
+                    id=sweepstake_category_enum.value,
+                    name=sweepstake_category_name,
+                    reward_amount=sweepstake_category_reward_amount,
+                )
+            )
+        session.commit()

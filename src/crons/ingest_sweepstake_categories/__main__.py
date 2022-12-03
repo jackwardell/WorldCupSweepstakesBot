@@ -1,3 +1,4 @@
+from src.shared.bot_api.api import BotApi
 from src.shared.schemas import SweepstakeCategoryEnum
 
 CATEGORIES = [
@@ -10,3 +11,17 @@ CATEGORIES = [
     {"id": SweepstakeCategoryEnum.OLDEST_GOAL_SCORER, "name": "Oldest Goal Scorer", "reward_amount": 10},
     {"id": SweepstakeCategoryEnum.YOUNGEST_GOAL_SCORER, "name": "Youngest Goal Scorer", "reward_amount": 10},
 ]
+
+
+def main() -> None:
+    bot_api = BotApi()
+    for category in CATEGORIES:
+        bot_api.save_sweepstake_category(
+            sweepstake_category_enum=category["id"],
+            sweepstake_category_name=category["name"],
+            sweepstake_category_reward_amount=category["reward_amount"],
+        )
+
+
+if __name__ == "__main__":
+    main()

@@ -163,7 +163,7 @@ class BotApi:
                     reward_amount=sweepstake_category_reward_amount,
                 )
             )
-        session.commit()
+            session.commit()
 
     def get_players(self) -> List[Player]:
         with self.session as session:

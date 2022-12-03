@@ -4,11 +4,11 @@ from src.shared.football_api.api import get_football_api
 
 
 def main() -> None:
-    db_api = get_bot_api()
+    bot_api = get_bot_api()
 
     for player in get_football_api().get_all_players():
         try:
-            db_api.save_player(player)
+            bot_api.save_player(player)
         except BotApiError:
             pass
 

@@ -4,11 +4,11 @@ from src.shared.telegram_api.api import get_telegram_api
 
 
 def main() -> None:
-    db_api = get_bot_api()
+    bot_api = get_bot_api()
 
     for user in get_telegram_api().get_users():
         try:
-            db_api.save_participant(user)
+            bot_api.save_participant(user)
         except BotApiError:
             pass
 

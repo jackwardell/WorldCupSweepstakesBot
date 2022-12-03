@@ -38,11 +38,11 @@ DRAW = {
 
 
 def main() -> None:
-    db_api = get_bot_api()
+    bot_api = get_bot_api()
 
     for team_id, participant_id in DRAW.items():
         try:
-            db_api.save_team_drawn_by_participant(team_id, participant_id)
+            bot_api.save_team_drawn_by_participant(team_id, participant_id)
         except BotApiError:
             pass
 

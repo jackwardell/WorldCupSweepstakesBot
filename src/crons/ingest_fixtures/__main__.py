@@ -4,11 +4,11 @@ from src.shared.football_api.api import get_football_api
 
 
 def main() -> None:
-    db_api = get_bot_api()
+    bot_api = get_bot_api()
 
     for fixture in get_football_api().get_fixtures(today_only=False):
         try:
-            db_api.save_or_update_fixture(fixture)
+            bot_api.save_or_update_fixture(fixture)
         except BotApiError:
             pass
 

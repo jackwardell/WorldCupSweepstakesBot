@@ -5,10 +5,13 @@ from src.shared.football_api.api import get_football_api
 
 def main() -> None:
     db_api = get_bot_api()
+    football_api = get_football_api()
 
-    for fixture in get_football_api().get_fixtures(today_only=False):
+    for fixture in get_bot_api().get_fixtures(today_only=False):
         try:
-            db_api.save_or_update_fixture(fixture)
+            fixture_events = football_api.get_fixture_events(fixture.football_api_id)
+            for fixture_event in fixture_events:
+                db_api.save_fixture_event(fixture_event)
         except BotApiError:
             pass
 

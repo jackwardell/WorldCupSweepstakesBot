@@ -145,6 +145,8 @@ class FixtureORM(Base):
 
 
 class FixtureEventORM(Base):
+    __tablename__ = "fixture_event"
+
     id: int = Column(Integer, primary_key=True, nullable=False)
     time_elapsed_min: int = Column(Integer, nullable=False)
     time_elapsed_extra_min: Optional[int] = Column(Integer, nullable=True)
@@ -155,6 +157,8 @@ class FixtureEventORM(Base):
 
 
 class PlayerORM(Base):
+    __tablename__ = "player"
+
     football_api_id: int = Column(Integer, primary_key=True, nullable=False)
     first_name: str = Column(String, nullable=False)
     last_name: str = Column(String, nullable=False)
@@ -181,6 +185,8 @@ class PlayerORM(Base):
 
 
 class SweepstakeCategoryORM(Base):
+    __tablename__ = "sweepstake_category"
+
     id: int = Column(Integer, primary_key=True, nullable=False)
     name: str = Column(String, nullable=False)
     reward_amount: int = Column(Integer, nullable=False)

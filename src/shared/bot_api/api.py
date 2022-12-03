@@ -5,6 +5,7 @@ from functools import lru_cache
 from typing import List
 
 import attr
+from loguru import logger
 from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy.engine import Engine
@@ -69,6 +70,7 @@ class BotApi:
             return [Participant.from_orm(p) for p in session.query(ParticipantORM).all()]
 
     def save_participant(self, telegram_user: TelegramParticipant) -> Participant:
+        logger.info(f"saving participant: {telegram_user.telegram_user_id}")
         with self.session as session:
             participant = ParticipantORM.from_telegram_user(telegram_user)
             session.add(participant)
@@ -88,6 +90,7 @@ class BotApi:
             return Team.from_orm(session.query(TeamORM).filter(TeamORM.football_api_id == football_api_id).one())
 
     def save_team(self, football_team: FootballTeam) -> Team:
+        logger.info(f"saving team: {football_team.football_api_id} {football_team.name}")
         with self.session as session:
             team = TeamORM.from_football_team(football_team)
             session.add(team)
@@ -99,6 +102,7 @@ class BotApi:
                 raise BotApiError(e) from e
 
     def save_team_drawn_by_participant(self, team_football_api_id: int, participant_telegram_user_id: int) -> None:
+        logger.info(f"saving draw_mapping:  {team_football_api_id} drawn by {participant_telegram_user_id}")
         with self.session as session:
             team_drawn_by_participant = DrawMappingORM.from_team_football_api_id_and_participant_telegram_user_id(
                 team_football_api_id=team_football_api_id,
@@ -128,6 +132,7 @@ class BotApi:
             return [Fixture.from_orm(f) for f in query]
 
     def save_or_update_fixture(self, football_fixture: FootballFixture) -> Fixture:
+        logger.info(f"saving or updating fixture: {football_fixture.football_api_id}")
         with self.session as session:
             try:
                 fixture = (
@@ -157,6 +162,7 @@ class BotApi:
         sweepstake_category_name: str,
         sweepstake_category_reward_amount: int,
     ) -> None:
+        logger.info(f"saving sweepstake_category: {sweepstake_category_name} {sweepstake_category_name}")
         with self.session as session:
             session.add(
                 SweepstakeCategoryORM(
@@ -172,6 +178,7 @@ class BotApi:
             return [Player.from_orm(p) for p in session.query(PlayerORM).all()]
 
     def save_player(self, football_player: FootballPlayer) -> None:
+        logger.info(f"saving player: {football_player.football_api_id}")
         with self.session as session:
             try:
                 session.add(PlayerORM.from_football_player(football_player))
@@ -180,6 +187,7 @@ class BotApi:
                 session.rollback()
 
     def save_fixture_event(self, fixture_event: FootballFixtureEvent) -> None:
+        logger.info(f"saving fixture_event: {fixture_event.fixture_football_api_id}")
         with self.session as session:
             session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
             session.commit()

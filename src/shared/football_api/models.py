@@ -75,6 +75,7 @@ class FootballFixtureEvent(FixtureEventSchema):
     @classmethod
     def from_football_api_response(cls, response: FootballApiFixtureEventsResponse) -> FootballFixtureEvent:
         fixture_event = cls(
+            fixture_football_api_id=response["parameters"]["fixture"],
             time_elapsed_min=response["response"]["time"]["elapsed"],
             time_elapsed_extra_min=response["response"]["time"]["extra"],
             team_football_api_id=response["response"]["team"]["id"],

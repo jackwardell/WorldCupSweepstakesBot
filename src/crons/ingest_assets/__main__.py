@@ -13,7 +13,7 @@ def main() -> None:
     bot_api = get_bot_api()
 
     for participant in bot_api.get_participants():
-        image_name = f"spiderman-{participant.name}.jpg"
+        image_name = f"spiderman-{participant.first_name}.jpg"
         image_path = ASSET_FOLDER / "rendered_assets" / image_name
         if image_path.exists():
             return
@@ -21,8 +21,8 @@ def main() -> None:
             spiderman_image = Image.open(str(ASSET_FOLDER / "spiderman.jpg"))
             draw = ImageDraw.Draw(spiderman_image)
             font = ImageFont.truetype(str(ASSET_FOLDER / "OpenSans-Bold.ttf"), 64)
-            draw.text((100, 175), participant.name, (0, 0, 0), font=font)
-            draw.text((520, 225), participant.name, (0, 0, 0), font=font)
+            draw.text((100, 175), participant.first_name, (0, 0, 0), font=font)
+            draw.text((520, 225), participant.first_name, (0, 0, 0), font=font)
             spiderman_image.save(str(image_path))
 
 

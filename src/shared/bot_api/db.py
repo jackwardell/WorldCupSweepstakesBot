@@ -21,6 +21,8 @@ from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 from src.shared.telegram_api.models import TelegramParticipant
 
+# from src.shared.football_api.models import FootballFixtureEvent
+
 Base = declarative_base()
 
 
@@ -154,6 +156,18 @@ class FixtureEventORM(Base):
     player_football_api_id: int = Column(Integer, ForeignKey("player.football_api_id"), nullable=False)
     type: str = Column(String, nullable=False)
     detail: str = Column(String, nullable=False)
+
+    # @classmethod
+    # def from_football_fixture_event(cls, football_fixture_event: FootballFixtureEvent) -> FixtureEventORM:
+    #     return cls(
+    #         id=football_fixture_event.,
+    #         time_elapsed_min=football_fixture_event.,
+    #         time_elapsed_extra_min=football_fixture_event.,
+    #         team_football_api_id=football_fixture_event.,
+    #         player_football_api_id=football_fixture_event.,
+    #         type=football_fixture_event.,
+    #         detail=football_fixture_event.,
+    #     )
 
 
 class PlayerORM(Base):

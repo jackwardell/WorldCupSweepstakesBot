@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 from src.shared.bot_api.db import DrawMappingORM
+from src.shared.bot_api.db import FixtureEventORM
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
 from src.shared.bot_api.db import PlayerORM
@@ -23,6 +24,7 @@ from src.shared.bot_api.models import Player
 from src.shared.bot_api.models import Team
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 from src.shared.open_weather_map_api.api import get_open_weather_map_api
@@ -176,3 +178,8 @@ class BotApi:
                 session.commit()
             except IntegrityError:
                 session.rollback()
+
+    def save_fixture_event(self, fixture_event: FootballFixtureEvent) -> None:
+        with self.session as session:
+            session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
+            session.commit()

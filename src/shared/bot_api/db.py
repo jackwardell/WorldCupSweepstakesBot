@@ -52,7 +52,7 @@ class TeamORM(Base):
 
     @classmethod
     def from_football_team(cls, football_team: FootballTeam) -> TeamORM:
-        return cls(name=football_team.name)
+        return cls(football_api_id=football_team.football_api_id, name=football_team.name)
 
 
 class DrawMappingORM(Base):

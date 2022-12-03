@@ -34,7 +34,7 @@ class BotApiError(Exception):
 
 @lru_cache
 def get_engine() -> Engine:
-    return create_engine(get_config().SQLALCHEMY_URL)
+    return create_engine(get_config().POSTGRES_DSN)
 
 
 @lru_cache
@@ -121,8 +121,8 @@ class BotApi:
             try:
                 fixture = (
                     session.query(FixtureORM)
-                    .filter(FixtureORM.home_team_name == football_fixture.home_team_name)
-                    .filter(FixtureORM.away_team_name == football_fixture.away_team_name)
+                    .filter(FixtureORM.home_team_football_api_id == football_fixture.home_team_football_api_id)
+                    .filter(FixtureORM.away_team_football_api_id == football_fixture.away_team_football_api_id)
                     .filter(FixtureORM.kick_off == football_fixture.kick_off)
                     .filter(FixtureORM.round == football_fixture.round)
                     .one()

@@ -25,4 +25,4 @@ class Config(BaseSettings):
     TELEGRAM_CHAT_ID: str
     TELEGRAM_API_KEY: str
     OPEN_WEATHER_MAP_API_KEY: str
-    SQLALCHEMY_URL: str
+    POSTGRES_DSN: str

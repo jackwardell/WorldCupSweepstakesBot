@@ -113,15 +113,15 @@ class FixtureORM(Base):
     home_goals_penalties: Optional[int] = Column(String, nullable=True)
     away_goals_penalties: Optional[int] = Column(String, nullable=True)
 
-    # home_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.home_team_name")
-    # away_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.away_team_name")
+    home_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.home_team_football_api_id")
+    away_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.away_team_football_api_id")
 
     @classmethod
     def from_football_fixture(cls, football_fixture: FootballFixture) -> FixtureORM:
         return cls(
             football_api_id=football_fixture.football_api_id,
-            home_team_name=football_fixture.home_team_name,
-            away_team_name=football_fixture.away_team_name,
+            home_team_football_api_id=football_fixture.home_team_football_api_id,
+            away_team_football_api_id=football_fixture.away_team_football_api_id,
             home_team_goals=football_fixture.home_team_goals,
             away_team_goals=football_fixture.away_team_goals,
             home_team_won=football_fixture.home_team_winner,

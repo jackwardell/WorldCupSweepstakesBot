@@ -46,7 +46,6 @@ class Fixture(FixtureSchema):
     @classmethod
     def from_orm(cls, fixture: FixtureORM) -> Fixture:
         return cls(
-            id=fixture.id,
             football_api_id=fixture.football_api_id,
             home_team=Team.from_orm(fixture.home_team),
             away_team=Team.from_orm(fixture.away_team),

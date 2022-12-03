@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from datetime import datetime
 from typing import List
 from typing import Optional
@@ -7,6 +8,7 @@ from typing import Optional
 from sqlalchemy import BigInteger
 from sqlalchemy import Boolean
 from sqlalchemy import Column
+from sqlalchemy import Date
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -104,14 +106,14 @@ class FixtureORM(Base):
     venue_city: str = Column(String, nullable=False)
     kick_off: datetime = Column(DateTime, nullable=False)
     round: str = Column(String, nullable=False)
-    home_goals_halftime: Optional[int] = Column(String, nullable=True)
-    away_goals_halftime: Optional[int] = Column(String, nullable=True)
-    home_goals_fulltime: Optional[int] = Column(String, nullable=True)
-    away_goals_fulltime: Optional[int] = Column(String, nullable=True)
-    away_goals_extratime: Optional[int] = Column(String, nullable=True)
-    home_goals_extratime: Optional[int] = Column(String, nullable=True)
-    home_goals_penalties: Optional[int] = Column(String, nullable=True)
-    away_goals_penalties: Optional[int] = Column(String, nullable=True)
+    home_goals_halftime: Optional[int] = Column(Integer, nullable=True)
+    away_goals_halftime: Optional[int] = Column(Integer, nullable=True)
+    home_goals_fulltime: Optional[int] = Column(Integer, nullable=True)
+    away_goals_fulltime: Optional[int] = Column(Integer, nullable=True)
+    away_goals_extratime: Optional[int] = Column(Integer, nullable=True)
+    home_goals_extratime: Optional[int] = Column(Integer, nullable=True)
+    home_goals_penalties: Optional[int] = Column(Integer, nullable=True)
+    away_goals_penalties: Optional[int] = Column(Integer, nullable=True)
 
     home_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.home_team_football_api_id")
     away_team: TeamORM = relationship("TeamORM", foreign_keys="FixtureORM.away_team_football_api_id")
@@ -139,3 +141,33 @@ class FixtureORM(Base):
             home_goals_penalties=football_fixture.home_goals_penalties,
             away_goals_penalties=football_fixture.away_goals_penalties,
         )
+
+
+class FixtureEventORM(Base):
+    id: int = Column(Integer, primary_key=True, nullable=False)
+    time_elapsed_min: int = Column(Integer, nullable=False)
+    time_elapsed_extra_min: Optional[int] = Column(Integer, nullable=True)
+    team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=False)
+    player_football_api_id: int = Column(Integer, ForeignKey("player.football_api_id"), nullable=False)
+    type: str = Column(String, nullable=False)
+    detail: str = Column(String, nullable=False)
+
+
+class PlayerORM(Base):
+    football_api_id: int = Column(Integer, primary_key=True, nullable=False)
+    first_name: str = Column(String, nullable=False)
+    last_name: str = Column(String, nullable=False)
+    date_of_birth: date = Column(Date, nullable=False)
+    team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=False)
+    yellow_cards: Optional[int] = Column(Integer, nullable=True)
+    yellow_then_red_cards: Optional[int] = Column(Integer, nullable=True)
+    red_cards: Optional[int] = Column(Integer, nullable=True)
+    goals: Optional[int] = Column(Integer, nullable=True)
+
+
+class SweepstakeCategoryORM(Base):
+    id: int = Column(Integer, primary_key=True, nullable=False)
+    name: str = Column(String, nullable=False)
+    reward_amount: int = Column(Integer, nullable=False)
+    winning_team_football_api_id: int = Column(Integer, ForeignKey("team.football_api_id"), nullable=True)
+    winning_player_football_api_id: int = Column(Integer, ForeignKey("player.football_api_id"), nullable=True)

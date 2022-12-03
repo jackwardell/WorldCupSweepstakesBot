@@ -6,16 +6,27 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class ParticipantSchema(BaseModel):
-    telegram_user_id: int
-    first_name: str
-
-
-class FixtureEventType(Enum):
+class FixtureEventTypeEnum(Enum):
     CARD = "Card"
     GOAL = "Goal"
     SUBST = "subst"
     VAR = "Var"
+
+
+class SweepstakeCategoryEnum(Enum):
+    WINNING_TEAM = 1
+    WORST_TEAM = 2
+    MOST_MEANINGFUL_PROTEST = 3
+    FILTHIEST_TEAM = 4
+    EARLIEST_GOAL = 5
+    LATEST_GOAL = 6
+    OLDEST_GOAL_SCORER = 7
+    YOUNGEST_GOAL_SCORER = 8
+
+
+class ParticipantSchema(BaseModel):
+    telegram_user_id: int
+    first_name: str
 
 
 class TeamSchema(BaseModel):
@@ -60,5 +71,5 @@ class FixtureEventSchema(BaseModel):
     time_elapsed_extra_min: Optional[int]
     team_football_api_id: int
     player_football_api_id: int
-    type: FixtureEventType
+    type: FixtureEventTypeEnum
     detail: str

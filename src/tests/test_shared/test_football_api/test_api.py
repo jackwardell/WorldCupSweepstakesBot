@@ -8,7 +8,7 @@ from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
-from src.shared.schemas import FixtureEventType
+from src.shared.schemas import FixtureEventTypeEnum
 
 
 @pytest.fixture
@@ -457,7 +457,7 @@ def test_get_fixture_events(football_api: FootballApi) -> None:
             time_elapsed_extra_min=None,
             team_football_api_id=163,
             player_football_api_id=25637,
-            type=FixtureEventType.SUBST,
+            type=FixtureEventTypeEnum.SUBST,
             detail="Substitution 1",
         ),
         FootballFixtureEvent(
@@ -465,7 +465,7 @@ def test_get_fixture_events(football_api: FootballApi) -> None:
             time_elapsed_extra_min=None,
             team_football_api_id=157,
             player_football_api_id=519,
-            type=FixtureEventType.CARD,
+            type=FixtureEventTypeEnum.CARD,
             detail="Yellow Card",
         ),
         FootballFixtureEvent(
@@ -473,7 +473,7 @@ def test_get_fixture_events(football_api: FootballApi) -> None:
             time_elapsed_extra_min=1,
             team_football_api_id=163,
             player_football_api_id=2929,
-            type=FixtureEventType.GOAL,
+            type=FixtureEventTypeEnum.GOAL,
             detail="Penalty",
         ),
     ]

@@ -106,14 +106,14 @@ class FootballApi:
             time.sleep(2)
         return players
 
-    def get_fixture_events(self, fixture_football_api_key: int) -> List[FootballFixtureEvent]:
-        params = {"fixture": fixture_football_api_key}
+    def get_fixture_events(self, fixture_football_api_id: int) -> List[FootballFixtureEvent]:
+        params = {"fixture": fixture_football_api_id}
         response = requests.get(
             self.fixture_events_url,
             params=params,
             headers=self.headers,
         )
-        return [FootballFixtureEvent.from_football_api_response(e) for e in response.json()]
+        return [FootballFixtureEvent.from_football_api_response(fixture_football_api_id, e) for e in response.json()]
 
     # def get_all_players(self, sleep_per_call: Optional[int] = None) -> List[FootballPlayer]:
     #     params = self.get_params()

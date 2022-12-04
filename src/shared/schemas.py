@@ -24,17 +24,21 @@ class SweepstakeCategoryEnum(Enum):
     YOUNGEST_GOAL_SCORER = 8
 
 
-class ParticipantSchema(BaseModel):
+class BaseSchema(BaseModel):
+    ...
+
+
+class ParticipantSchema(BaseSchema):
     telegram_user_id: int
     first_name: str
 
 
-class TeamSchema(BaseModel):
+class TeamSchema(BaseSchema):
     football_api_id: int
     name: str
 
 
-class FixtureSchema(BaseModel):
+class FixtureSchema(BaseSchema):
     football_api_id: int
     home_team_goals: Optional[int]
     away_team_goals: Optional[int]
@@ -54,7 +58,7 @@ class FixtureSchema(BaseModel):
     away_goals_penalties: Optional[int]
 
 
-class PlayerSchema(BaseModel):
+class PlayerSchema(BaseSchema):
     football_api_id: int
     first_name: str
     last_name: str
@@ -66,7 +70,7 @@ class PlayerSchema(BaseModel):
     goals: Optional[int]
 
 
-class FixtureEventSchema(BaseModel):
+class FixtureEventSchema(BaseSchema):
     fixture_football_api_id: int
     time_elapsed_min: int
     time_elapsed_extra_min: Optional[int]

@@ -11,11 +11,16 @@ from typing import Union
 
 import attr
 import requests
+from requests import HTTPError
 from src.shared.config import get_config
 from src.shared.football_api.models import FootballFixture
 from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
+from tenacity import retry
+from tenacity import retry_if_exception_type
+from tenacity import stop_after_attempt
+from tenacity import wait_fixed
 
 
 @lru_cache
@@ -40,6 +45,7 @@ class FootballApi:
     season: str = "2022"
     session: requests.Session = attr.ib(factory=get_session)
 
+    @retry(stop=stop_after_attempt(5), wait=wait_fixed(2), retry=retry_if_exception_type(HTTPError))
     def get(self, url: str, params: Dict[str, Union[str, int]]) -> Dict[str, Any]:
         resp = self.session.get(url, params=params)
         resp.raise_for_status()

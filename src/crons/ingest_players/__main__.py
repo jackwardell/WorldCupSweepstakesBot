@@ -11,7 +11,7 @@ def main() -> None:
 
     for player in get_football_api().get_all_players():
         try:
-            bot_api.save_player(player)
+            bot_api.save_or_update_player(player)
         except BotApiError:
             pass
 

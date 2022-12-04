@@ -133,26 +133,23 @@ class BotApi:
     def save_or_update_fixture(self, football_fixture: FootballFixture) -> Fixture:
         logger.info(f"saving or updating fixture: {football_fixture.football_api_id}")
         with self.session as session:
-            existing_fixture = (
-                session.query(FixtureORM).filter_by(football_api_id=football_fixture.football_api_id).first()
-            )
-            if existing_fixture:
-                existing_fixture.home_team_goals = football_fixture.home_team_goals
-                existing_fixture.away_team_goals = football_fixture.away_team_goals
-                existing_fixture.home_team_won = football_fixture.home_team_winner
-                existing_fixture.away_team_won = football_fixture.away_team_winner
-                existing_fixture.home_goals_halftime = football_fixture.home_goals_halftime
-                existing_fixture.away_goals_halftime = football_fixture.away_goals_halftime
-                existing_fixture.home_goals_fulltime = football_fixture.home_goals_fulltime
-                existing_fixture.away_goals_fulltime = football_fixture.away_goals_fulltime
-                existing_fixture.away_goals_extratime = football_fixture.away_goals_extratime
-                existing_fixture.home_goals_extratime = football_fixture.home_goals_extratime
-                existing_fixture.home_goals_penalties = football_fixture.home_goals_penalties
-                existing_fixture.away_goals_penalties = football_fixture.away_goals_penalties
-                session.add(existing_fixture)
+            fixture = session.query(FixtureORM).filter_by(football_api_id=football_fixture.football_api_id).first()
+            if fixture:
+                fixture.home_team_goals = football_fixture.home_team_goals
+                fixture.away_team_goals = football_fixture.away_team_goals
+                fixture.home_team_won = football_fixture.home_team_winner
+                fixture.away_team_won = football_fixture.away_team_winner
+                fixture.home_goals_halftime = football_fixture.home_goals_halftime
+                fixture.away_goals_halftime = football_fixture.away_goals_halftime
+                fixture.home_goals_fulltime = football_fixture.home_goals_fulltime
+                fixture.away_goals_fulltime = football_fixture.away_goals_fulltime
+                fixture.away_goals_extratime = football_fixture.away_goals_extratime
+                fixture.home_goals_extratime = football_fixture.home_goals_extratime
+                fixture.home_goals_penalties = football_fixture.home_goals_penalties
+                fixture.away_goals_penalties = football_fixture.away_goals_penalties
             else:
                 fixture = FixtureORM.from_football_fixture(football_fixture)
-                session.add(fixture)
+            session.add(fixture)
             session.commit()
             return Fixture.from_orm(fixture)
 
@@ -164,14 +161,17 @@ class BotApi:
     ) -> None:
         logger.info(f"saving sweepstake_category: {sweepstake_category_name} {sweepstake_category_name}")
         with self.session as session:
-            session.add(
-                SweepstakeCategoryORM(
-                    id=sweepstake_category_enum.value,
-                    name=sweepstake_category_name,
-                    reward_amount=sweepstake_category_reward_amount,
+            try:
+                session.add(
+                    SweepstakeCategoryORM(
+                        id=sweepstake_category_enum.value,
+                        name=sweepstake_category_name,
+                        reward_amount=sweepstake_category_reward_amount,
+                    )
                 )
-            )
-            session.commit()
+                session.commit()
+            except IntegrityError:
+                session.rollback()
 
     def get_players(self) -> List[Player]:
         with self.session as session:
@@ -196,5 +196,17 @@ class BotApi:
     def save_fixture_event(self, fixture_event: FootballFixtureEvent) -> None:
         logger.info(f"saving fixture_event: {fixture_event.fixture_football_api_id}")
         with self.session as session:
-            session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
-            session.commit()
+            fixture_event = (
+                session.query(FixtureEventORM)
+                .filter(FixtureEventORM.fixture_football_api_id == fixture_event.fixture_football_api_id)
+                .filter(FixtureEventORM.time_elapsed_min == fixture_event.time_elapsed_min)
+                .filter(FixtureEventORM.time_elapsed_extra_min == fixture_event.time_elapsed_extra_min)
+                .filter(FixtureEventORM.team_football_api_id == fixture_event.team_football_api_id)
+                .filter(FixtureEventORM.player_football_api_id == fixture_event.player_football_api_id)
+                .filter(FixtureEventORM.type == fixture_event.type.value)
+                .filter(FixtureEventORM.detail == fixture_event.detail)
+                .first()
+            )
+            if not fixture_event:
+                session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
+                session.commit()

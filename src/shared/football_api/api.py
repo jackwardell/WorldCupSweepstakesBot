@@ -113,7 +113,10 @@ class FootballApi:
             params=params,
             headers=self.headers,
         )
-        return [FootballFixtureEvent.from_football_api_response(fixture_football_api_id, e) for e in response.json()]
+        return [
+            FootballFixtureEvent.from_football_api_response(fixture_football_api_id, e)
+            for e in response.json()["response"]
+        ]
 
     # def get_all_players(self, sleep_per_call: Optional[int] = None) -> List[FootballPlayer]:
     #     params = self.get_params()

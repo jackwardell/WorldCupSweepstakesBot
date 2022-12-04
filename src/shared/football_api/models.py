@@ -74,6 +74,7 @@ class FootballPlayer(PlayerSchema):
 class FootballFixtureEvent(FixtureEventSchema):
     @classmethod
     def from_football_api_response(cls, fixture_id: int, response: FixturesEventsResponse) -> FootballFixtureEvent:
+        print(response)
         fixture_event = cls(
             fixture_football_api_id=fixture_id,
             time_elapsed_min=response["time"]["elapsed"],

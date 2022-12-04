@@ -17,11 +17,10 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from src.shared.football_api.models import FootballFixture
+from src.shared.football_api.models import FootballFixtureEvent
 from src.shared.football_api.models import FootballPlayer
 from src.shared.football_api.models import FootballTeam
 from src.shared.telegram_api.models import TelegramParticipant
-
-# from src.shared.football_api.models import FootballFixtureEvent
 
 Base = declarative_base()
 
@@ -158,17 +157,30 @@ class FixtureEventORM(Base):
     type: str = Column(String, nullable=False)
     detail: str = Column(String, nullable=False)
 
-    # @classmethod
-    # def from_football_fixture_event(cls, football_fixture_event: FootballFixtureEvent) -> FixtureEventORM:
-    #     return cls(
-    #         id=football_fixture_event.,
-    #         time_elapsed_min=football_fixture_event.,
-    #         time_elapsed_extra_min=football_fixture_event.,
-    #         team_football_api_id=football_fixture_event.,
-    #         player_football_api_id=football_fixture_event.,
-    #         type=football_fixture_event.,
-    #         detail=football_fixture_event.,
-    #     )
+    __table_args__ = (
+        UniqueConstraint(
+            "fixture_football_api_id",
+            "time_elapsed_min",
+            "time_elapsed_extra_min",
+            "team_football_api_id",
+            "player_football_api_id",
+            "type",
+            "detail",
+            name="one_event_per_min_per_team_per_player_per_type",
+        ),
+    )
+
+    @classmethod
+    def from_football_fixture_event(cls, football_fixture_event: FootballFixtureEvent) -> FixtureEventORM:
+        return cls(
+            fixture_football_api_id=football_fixture_event.fixture_football_api_id,
+            time_elapsed_min=football_fixture_event.time_elapsed_min,
+            time_elapsed_extra_min=football_fixture_event.time_elapsed_extra_min,
+            team_football_api_id=football_fixture_event.team_football_api_id,
+            player_football_api_id=football_fixture_event.player_football_api_id,
+            type=football_fixture_event.type.value,
+            detail=football_fixture_event.detail,
+        )
 
 
 class PlayerORM(Base):

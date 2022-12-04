@@ -258,39 +258,3 @@ class FixturesEventsResponse(TypedDict):
     type: Optional[str]
     detail: Optional[str]
     comments: Optional[str]
-
-
-class FootballApiBaseResponseParameters(TypedDict):
-    fixture: Optional[int]
-    league: Optional[int]
-    season: Optional[int]
-    page: Optional[int]
-
-
-class FootballApiBaseResponsePaging(TypedDict):
-    current: int
-    total: int
-
-
-class FootballApiBaseResponse(TypedDict):
-    get: str
-    parameters: Optional[FootballApiBaseResponseParameters]
-    errors: List[str]
-    results: int
-    paging: FootballApiBaseResponsePaging
-
-
-class FootballApiFixtureEventsResponse(FootballApiBaseResponse):
-    response: FixturesEventsResponse
-
-
-class FootballApiFixtureResponse(FootballApiBaseResponse):
-    response: FixturesFixturesResponse
-
-
-class FootballApiPlayerResponse(FootballApiBaseResponse):
-    response: PlayerPlayerResponse
-
-
-class FootballApiTeamResponse(FootballApiBaseResponse):
-    response: TeamTeamInformationResponse

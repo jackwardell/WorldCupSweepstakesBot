@@ -1,3 +1,5 @@
+import time
+
 from loguru import logger
 from src.shared.bot_api.api import BotApiError
 from src.shared.bot_api.api import get_bot_api
@@ -17,6 +19,7 @@ def main() -> None:
                 bot_api.save_fixture_event(fixture_event)
         except BotApiError:
             pass
+        time.sleep(2)
 
 
 if __name__ == "__main__":

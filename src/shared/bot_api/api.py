@@ -189,5 +189,8 @@ class BotApi:
     def save_fixture_event(self, fixture_event: FootballFixtureEvent) -> None:
         logger.info(f"saving fixture_event: {fixture_event.fixture_football_api_id}")
         with self.session as session:
-            session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
-            session.commit()
+            try:
+                session.add(FixtureEventORM.from_football_fixture_event(fixture_event))
+                session.commit()
+            except IntegrityError:
+                session.rollback()

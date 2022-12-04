@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from loguru import logger
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -10,6 +11,8 @@ ASSET_FOLDER = PROJECT_ROOT / "src" / "assets"
 
 
 def main() -> None:
+    logger.info("running ingest_assets")
+
     bot_api = get_bot_api()
 
     for participant in bot_api.get_participants():

@@ -1,3 +1,4 @@
+from loguru import logger
 from src.shared.bot_api.api import BotApi
 from src.shared.schemas import SweepstakeCategoryEnum
 
@@ -14,6 +15,8 @@ CATEGORIES = [
 
 
 def main() -> None:
+    logger.info("running ingest_sweepstake_categories")
+
     bot_api = BotApi()
     for category in CATEGORIES:
         bot_api.save_sweepstake_category(

@@ -1,9 +1,12 @@
+from loguru import logger
 from src.shared.bot_api.api import BotApiError
 from src.shared.bot_api.api import get_bot_api
 from src.shared.telegram_api.api import get_telegram_api
 
 
 def main() -> None:
+    logger.info("running ingest_participants")
+
     bot_api = get_bot_api()
 
     for user in get_telegram_api().get_users():

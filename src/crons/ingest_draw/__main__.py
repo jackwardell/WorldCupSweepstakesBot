@@ -1,3 +1,4 @@
+from loguru import logger
 from src.shared.bot_api.api import BotApiError
 from src.shared.bot_api.api import get_bot_api
 
@@ -38,6 +39,8 @@ DRAW = {
 
 
 def main() -> None:
+    logger.info("running ingest_draw")
+
     bot_api = get_bot_api()
 
     for team_id, participant_id in DRAW.items():

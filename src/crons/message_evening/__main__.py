@@ -18,8 +18,10 @@ def main() -> None:
         sleep(1)
 
         its_coming_home = []
+        youre_out = {}
         for fixture in fixtures:
             msg_id = telegram_api.send_message(fixture.evening_message)
+            youre_out[msg_id] = fixture
             if (fixture.home_team.name == "England" and fixture.home_team_winner) or (
                 fixture.away_team.name == "England" and fixture.away_team_winner
             ):
@@ -28,6 +30,14 @@ def main() -> None:
 
         if its_coming_home:
             telegram_api.send_its_coming_home_image(its_coming_home.pop())
+
+        for msg_id, fixture in youre_out.items():
+            sleep(1)
+            telegram_api.send_message(
+                f"☠️ Oh btw {fixture.loser_participant.telegram_tag}, "
+                f"{fixture.loser_team.name_and_emoji} is out, get rekt you fucking loser ☠️",
+                reply_to_message_id=msg_id,
+            )
 
 
 if __name__ == "__main__":

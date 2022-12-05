@@ -161,23 +161,31 @@ class Fixture(FixtureSchema):
         msg = (
             f"🏆 {self.home_team.name_and_emoji} {self.home_to_away_comparison} {self.away_team.name_and_emoji} ✨\n"
             f"🧐 {self.analysis} ⚽\n"
-            f"🎉 Well done {self.winner_participant_tag} and get rekt {self.loser_participant_tag} 💀"
+            f"🎉 Well done {self.winner_participant.telegram_tag} and get rekt {self.loser_participant.telegram_tag} 💀"
         )
         return msg
 
     @property
-    def winner_participant_tag(self) -> str:
-        if self.home_team_winner:
-            return self.home_team.participant.telegram_tag
-        else:
-            return self.away_team.participant.telegram_tag
+    def winner_participant(self) -> Participant:
+        return self.winner_team.participant
 
     @property
-    def loser_participant_tag(self) -> str:
-        if self.away_team_winner:
-            return self.home_team.participant.telegram_tag
+    def loser_participant(self) -> Participant:
+        return self.loser_team.participant
+
+    @property
+    def winner_team(self) -> Team:
+        if self.home_team_winner:
+            return self.home_team
         else:
-            return self.away_team.participant.telegram_tag
+            return self.away_team
+
+    @property
+    def loser_team(self) -> Team:
+        if self.away_team_winner:
+            return self.home_team
+        else:
+            return self.away_team
 
     @property
     def full_time_analysis(self) -> str:

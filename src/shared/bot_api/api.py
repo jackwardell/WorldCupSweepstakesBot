@@ -398,3 +398,20 @@ class BotApi:
             age = f"{age_timedelta.days // 365} years and {age_timedelta.days % 365} days old"
             data = {"player_full_name": oldest_goalscorer.first_name + " " + oldest_goalscorer.last_name, "age": age}
             return Team.from_orm(oldest_goalscorer.team), data
+
+    def get_remaining_teams(self) -> List[Team]:
+        with self.session as session:
+            all_remaining_teams_res = (
+                session.query(FixtureORM.home_team_football_api_id, FixtureORM.away_team_football_api_id)
+                .filter(FixtureORM.kick_off > datetime.utcnow())
+                .all()
+            )
+            all_remaining_teams_ids = [item for sublist in all_remaining_teams_res for item in sublist]
+            teams = session.query(TeamORM).filter(TeamORM.football_api_id.in_(all_remaining_teams_ids)).all()
+            return [Team.from_orm(team) for team in teams]
+
+    def get_non_remaining_teams(self) -> List[Team]:
+        remaining_team_ids = [t.football_api_id for t in self.get_remaining_teams()]
+        with self.session as session:
+            teams = session.query(TeamORM).filter(TeamORM.football_api_id.not_in(remaining_team_ids)).all()
+            return [Team.from_orm(team) for team in teams]

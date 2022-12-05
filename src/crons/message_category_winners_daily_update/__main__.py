@@ -8,7 +8,7 @@ from src.shared.telegram_api.api import get_telegram_api
 def main() -> None:
     bot_api = get_bot_api()
     telegram_api = get_telegram_api()
-    telegram_api.send_message("Yo folks, new feature drop 👇")
+    telegram_api.send_message("Yo folks, daily update 👇")
     time.sleep(2)
 
     sweepstake_category = bot_api.get_sweepstake_category(SweepstakeCategoryIDEnum.WORST_TEAM)
@@ -72,6 +72,15 @@ def main() -> None:
         f"{oldest_goalscorer_team.emoji} {oldest_goalscorer_team.name}'s {data['player_full_name']} scored at the"
         f" whopping age of {data['age']} 🦵⚽"
     )
+
+    telegram_api.send_message("🤔 Who's in and who's out ❓")
+    for team in bot_api.get_remaining_teams():
+        telegram_api.send_message(f"{team.emoji_and_name} is still in, well done {team.participant.telegram_tag} ✅")
+        time.sleep(1)
+
+    for team in bot_api.get_non_remaining_teams():
+        telegram_api.send_message(f"{team.emoji_and_name} is still in, suck it {team.participant.telegram_tag} ❌")
+        time.sleep(1)
 
 
 if __name__ == "__main__":

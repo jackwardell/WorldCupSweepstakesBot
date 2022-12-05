@@ -37,6 +37,10 @@ class Team(TeamSchema):
     def name_and_emoji(self) -> str:
         return f"{self.name} {self.emoji}"
 
+    @property
+    def emoji_and_name(self) -> str:
+        return f"{self.emoji} {self.name}"
+
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
         return cls(
@@ -237,7 +241,7 @@ class Fixture(FixtureSchema):
 
     @property
     def matching_participants(self) -> bool:
-        return self.home_participant.name == self.away_participant.name
+        return self.home_team.participant.telegram_user_id == self.away_team.participant.telegram_user_id
 
 
 class Player(PlayerSchema):

@@ -13,7 +13,7 @@ class FixtureEventTypeEnum(Enum):
     VAR = "Var"
 
 
-class SweepstakeCategoryEnum(Enum):
+class SweepstakeCategoryIDEnum(Enum):
     WINNING_TEAM = 1
     WORST_TEAM = 2
     MOST_MEANINGFUL_PROTEST = 3
@@ -24,21 +24,23 @@ class SweepstakeCategoryEnum(Enum):
     YOUNGEST_GOAL_SCORER = 8
 
 
-class BaseSchema(BaseModel):
-    ...
+class SweepstakeCategorySchema(BaseModel):
+    id: SweepstakeCategoryIDEnum
+    name: str
+    reward_amount: int
 
 
-class ParticipantSchema(BaseSchema):
+class ParticipantSchema(BaseModel):
     telegram_user_id: int
     first_name: str
 
 
-class TeamSchema(BaseSchema):
+class TeamSchema(BaseModel):
     football_api_id: int
     name: str
 
 
-class FixtureSchema(BaseSchema):
+class FixtureSchema(BaseModel):
     football_api_id: int
     home_team_goals: Optional[int]
     away_team_goals: Optional[int]
@@ -58,7 +60,7 @@ class FixtureSchema(BaseSchema):
     away_goals_penalties: Optional[int]
 
 
-class PlayerSchema(BaseSchema):
+class PlayerSchema(BaseModel):
     football_api_id: int
     first_name: str
     last_name: str
@@ -70,7 +72,7 @@ class PlayerSchema(BaseSchema):
     goals: Optional[int]
 
 
-class FixtureEventSchema(BaseSchema):
+class FixtureEventSchema(BaseModel):
     fixture_football_api_id: int
     time_elapsed_min: int
     time_elapsed_extra_min: Optional[int]

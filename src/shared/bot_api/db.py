@@ -48,6 +48,8 @@ class TeamORM(Base):
     football_api_id: int = Column(Integer, primary_key=True, nullable=False)
     name: str = Column(String, nullable=False)
 
+    players: List[PlayerORM] = relationship("PlayerORM", back_populates="team", uselist=True)
+
     draw_mapping: DrawMappingORM = relationship(
         "DrawMappingORM",
         back_populates="team",
@@ -157,6 +159,10 @@ class FixtureEventORM(Base):
     type: str = Column(String, nullable=False)
     detail: str = Column(String, nullable=False)
 
+    fixture: FixtureORM = relationship("FixtureORM", uselist=False)
+    team: TeamORM = relationship("TeamORM", uselist=False)
+    player: PlayerORM = relationship("PlayerORM", uselist=False)
+
     __table_args__ = (
         UniqueConstraint(
             "fixture_football_api_id",
@@ -195,6 +201,8 @@ class PlayerORM(Base):
     yellow_then_red_cards: Optional[int] = Column(Integer, nullable=True)
     red_cards: Optional[int] = Column(Integer, nullable=True)
     goals: Optional[int] = Column(Integer, nullable=True)
+
+    team: List[TeamORM] = relationship("TeamORM", back_populates="players", uselist=False)
 
     @classmethod
     def from_football_player(cls, football_player: FootballPlayer) -> PlayerORM:

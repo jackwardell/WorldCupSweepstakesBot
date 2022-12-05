@@ -4,12 +4,15 @@ from typing import Optional
 
 from src.shared.bot_api.db import FixtureORM
 from src.shared.bot_api.db import ParticipantORM
+from src.shared.bot_api.db import SweepstakeCategoryORM
 from src.shared.bot_api.db import TeamORM
 from src.shared.emoji import COUNTRIES_AND_FLAGS
 from src.shared.schemas import FixtureEventSchema
 from src.shared.schemas import FixtureSchema
 from src.shared.schemas import ParticipantSchema
 from src.shared.schemas import PlayerSchema
+from src.shared.schemas import SweepstakeCategoryIDEnum
+from src.shared.schemas import SweepstakeCategorySchema
 from src.shared.schemas import TeamSchema
 
 
@@ -29,6 +32,10 @@ class Team(TeamSchema):
     @property
     def emoji(self) -> str:
         return COUNTRIES_AND_FLAGS[self.name]
+
+    @property
+    def name_and_emoji(self) -> str:
+        return f"{self.name} {self.emoji}"
 
     @classmethod
     def from_orm(cls, team: TeamORM) -> Team:
@@ -146,3 +153,15 @@ class Player(PlayerSchema):
 
 class FixtureEvent(FixtureEventSchema):
     ...
+
+
+class SweepstakeCategory(SweepstakeCategorySchema):
+    ...
+
+    @classmethod
+    def from_orm(cls, sweepstake_category: SweepstakeCategoryORM) -> SweepstakeCategory:
+        return SweepstakeCategory(
+            id=SweepstakeCategoryIDEnum(sweepstake_category.id),
+            name=sweepstake_category.name,
+            reward_amount=sweepstake_category.reward_amount,
+        )

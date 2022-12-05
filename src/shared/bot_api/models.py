@@ -99,48 +99,133 @@ class Fixture(FixtureSchema):
 
     @property
     def evening_message(self) -> str:
-        first_msg = "Well done"
-        if self.home_team_won is None and self.away_team_won is None:
-            home_team_match_result = "drew with"
-            home_team_insult_result = "and"
-            winner_participant_tag = self.home_participant.telegram_tag
-            loser_participant_tag = self.away_participant.telegram_tag
-        elif self.home_team_goals > self.away_team_goals and self.home_team_won:
-            home_team_match_result = "beat"
-            home_team_insult_result = "and get rekt"
-            winner_participant_tag = self.home_participant.telegram_tag
-            loser_participant_tag = self.away_participant.telegram_tag
-        elif self.away_team_goals > self.home_team_goals and self.away_team_won:
-            home_team_match_result = "lost to"
-            home_team_insult_result = "and get rekt"
-            winner_participant_tag = self.away_participant.telegram_tag
-            loser_participant_tag = self.home_participant.telegram_tag
-        else:
-            raise ValueError("hmmm?")
+        # first_msg = "Well done"
+        # if self.home_team_winner is None and self.away_team_winner is None:
+        #     home_team_match_result = "drew with"
+        #     home_team_insult_result = "and"
+        #     winner_participant_tag = self.home_team.participant.telegram_tag
+        #     loser_participant_tag = self.away_team.participant.telegram_tag
+        # elif self.home_team_goals > self.away_team_goals and self.home_team_winner:
+        #     home_team_match_result = "beat"
+        #     home_team_insult_result = "and get rekt"
+        #     winner_participant_tag = self.home_team.participant.telegram_tag
+        #     loser_participant_tag = self.away_team.participant.telegram_tag
+        # elif self.away_team_goals > self.home_team_goals and self.away_team_winner:
+        #     home_team_match_result = "lost to"
+        #     home_team_insult_result = "and get rekt"
+        #     winner_participant_tag = self.away_team.participant.telegram_tag
+        #     loser_participant_tag = self.home_team.participant.telegram_tag
+        # else:
+        #     home_team_match_result = "lost to" if self.away_team_winner else "beat"
+        #     home_team_insult_result = "and get rekt"
+        #     winner_participant_tag = self.away_team.participant.telegram_tag if
+        #     self.away_team_winner else self.home_team.participant.telegram_tag
+        #     loser_participant_tag = self.home_team.participant.telegram_tag if
+        #     self.away_team_winner else self.away_team.participant.telegram_tag
+        #
+        # if self.home_team.participant.telegram_user_id == self.away_team.participant.telegram_user_id:
+        #     home_team_insult_result = ""
+        #     first_msg = "Well done/Get rekt"
+        #     winner_participant_tag = self.away_team.participant.telegram_tag
+        #     loser_participant_tag = self.home_team.participant.telegram_tag
+        #
+        # if self.home_goals_extratime is not None or self.away_goals_extratime is not None:
+        #     extratime = f"{self.home_goals_extratime}-{self.away_goals_extratime} in ET"
+        # else:
+        #     extratime = ""
+        # if self.home_goals_penalties is not None or self.away_goals_penalties is not None:
+        #     penalties = f"{self.home_goals_penalties}-{self.away_goals_penalties} in Penalties"
+        # else:
+        #     penalties = ""
+        # message = (
+        #     "🏆 {home_team_name} {home_team_emoji} {home_team_match_result} {away_team_name} {away_team_emoji} "
+        #     "{home_team_goals}-{away_team_goals} in FT {extratime} {penalties} ⚽\n"
+        #     "🎉 {first_msg} {winner_participant_tag} {home_team_insult_result} {loser_participant_tag} 💀"
+        # ).format(
+        #     home_team_name=self.home_team.name,
+        #     home_team_emoji=self.home_team.emoji,
+        #     home_team_match_result=home_team_match_result,
+        #     away_team_name=self.away_team.name,
+        #     away_team_emoji=self.away_team.emoji,
+        #     home_team_goals=self.home_team_goals,
+        #     away_team_goals=self.away_team_goals,
+        #     extratime=extratime,
+        #     penalties=penalties,
+        #     winner_participant_tag=winner_participant_tag,
+        #     loser_participant_tag=loser_participant_tag,
+        #     first_msg=first_msg,
+        #     home_team_insult_result=home_team_insult_result,
+        # )
+        # # return message
 
-        if self.home_participant.name == self.away_participant.name:
-            home_team_insult_result = ""
-            first_msg = "Well done/Get rekt"
-            winner_participant_tag = self.away_participant.telegram_tag
-            loser_participant_tag = self.home_participant.telegram_tag
-        message = (
-            "🏆 {home_team_name} {home_team_emoji} {home_team_match_result} {away_team_name} {away_team_emoji} "
-            "{home_team_goals}-{away_team_goals} ⚽\n"
-            "🎉 {first_msg} {winner_participant_tag} {home_team_insult_result} {loser_participant_tag} 💀"
-        ).format(
-            home_team_name=self.home_team.name,
-            home_team_emoji=self.home_team.emoji,
-            home_team_match_result=home_team_match_result,
-            away_team_name=self.away_team.name,
-            away_team_emoji=self.away_team.emoji,
-            home_team_goals=self.home_team_goals,
-            away_team_goals=self.away_team_goals,
-            winner_participant_tag=winner_participant_tag,
-            loser_participant_tag=loser_participant_tag,
-            first_msg=first_msg,
-            home_team_insult_result=home_team_insult_result,
+        msg = (
+            f"🏆 {self.home_team.name_and_emoji} {self.home_to_away_comparison} {self.away_team.name_and_emoji} ✨\n"
+            f"🧐 {self.analysis} ⚽\n"
+            f"🎉 Well done {self.winner_participant_tag} and get rekt {self.loser_participant_tag} 💀"
         )
-        return message
+        return msg
+
+    @property
+    def winner_participant_tag(self) -> str:
+        if self.home_team_winner:
+            return self.home_team.participant.telegram_tag
+        else:
+            return self.away_team.participant.telegram_tag
+
+    @property
+    def loser_participant_tag(self) -> str:
+        if self.away_team_winner:
+            return self.home_team.participant.telegram_tag
+        else:
+            return self.away_team.participant.telegram_tag
+
+    @property
+    def full_time_analysis(self) -> str:
+        return f"The score was {self.home_goals_fulltime}-{self.away_team_goals} in FT"
+
+    @property
+    def extra_time_analysis(self) -> str:
+        if self.home_goals_extratime is None and self.away_goals_extratime is None:
+            return ""
+        return f"{self.home_goals_extratime}-{self.away_goals_extratime} in ET"
+
+    @property
+    def penalties_analysis(self) -> str:
+        if self.home_goals_penalties is None and self.away_goals_penalties is None:
+            return ""
+        return f"and concluded in a penalty shootout: {self.home_goals_penalties}-{self.away_goals_penalties}"
+
+    @property
+    def analysis(self) -> str:
+        if self.full_time_analysis and not self.extra_time_analysis and not self.penalties_analysis:
+            return self.full_time_analysis
+        if self.full_time_analysis and self.extra_time_analysis and not self.penalties_analysis:
+            return self.full_time_analysis + " and " + self.extra_time_analysis
+        if self.extra_time_analysis and self.extra_time_analysis and self.penalties_analysis:
+            return self.full_time_analysis + ", " + self.extra_time_analysis + " " + self.penalties_analysis
+
+    @property
+    def home_to_away_comparison(self) -> str:
+        if self.home_team_winner is None and self.away_team_winner is None:
+            return "drew with"
+        if self.home_team_goals - self.away_team_goals >= 4:
+            return "annihilated"
+        if self.home_team_goals - self.away_team_goals == 3:
+            return "destroyed"
+        if self.home_team_goals - self.away_team_goals == 2:
+            return "smashed"
+        if self.home_team_goals - self.away_team_goals == 1:
+            return "beat"
+        if self.away_team_goals - self.home_team_goals >= 4:
+            return "were annihilated by"
+        if self.away_team_goals - self.home_team_goals == 3:
+            return "were destroyed by"
+        if self.away_team_goals - self.home_team_goals == 2:
+            return "were smashed by"
+        if self.away_team_goals - self.home_team_goals == 1:
+            return "lost to"
+        else:
+            return "lost to" if self.away_team_winner else "beat"
 
     @property
     def matching_participants(self) -> bool:

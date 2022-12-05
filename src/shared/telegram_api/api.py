@@ -8,8 +8,9 @@ from src.shared.config import get_config
 from src.shared.config import PROJECT_ROOT
 from src.shared.telegram_api.models import TelegramParticipant
 from telegram import Bot
-from telegram import ParseMode
 from telegram.utils.types import FileInput
+
+# from telegram import ParseMode
 
 BOT_NAME = "WorldCupBot2022"
 
@@ -26,13 +27,13 @@ class TelegramApi:
 
     def send_message(self, message: str, reply_to_message_id: int = None) -> int:
         print(message)
-        message = self.bot.send_message(
-            self.chat_id,
-            message,
-            reply_to_message_id=reply_to_message_id,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-        return message.message_id
+        # message = self.bot.send_message(
+        #     self.chat_id,
+        #     message,
+        #     reply_to_message_id=reply_to_message_id,
+        #     parse_mode=ParseMode.MARKDOWN,
+        # )
+        # return message.message_id
 
     def send_photo(self, image: FileInput, message: str, reply_to_message_id: int = None) -> int:
         return self.bot.send_photo(self.chat_id, image, message, reply_to_message_id=reply_to_message_id).message_id
@@ -44,6 +45,11 @@ class TelegramApi:
         image_path = PROJECT_ROOT / "src" / "assets" / "rendered_assets" / f"spiderman-{participant_name}.jpg"
         with open(image_path, "rb") as jpg:
             return self.send_photo(jpg, "🤔", reply_to_message_id=reply_to_message_id)
+
+    def send_its_coming_home_image(self, reply_to_message_id: int = None) -> int:
+        image_path = PROJECT_ROOT / "src" / "assets" / "its_coming_home.jpeg"
+        with open(image_path, "rb") as jpg:
+            return self.send_photo(jpg, "🏴󠁧󠁢󠁥󠁮󠁧󠁿 It's Coming Home 🏴󠁧󠁢󠁥󠁮󠁧󠁿", reply_to_message_id=reply_to_message_id)
 
     def get_users(self) -> List[TelegramParticipant]:
         administrators = self.bot.get_chat(self.chat_id).get_administrators()

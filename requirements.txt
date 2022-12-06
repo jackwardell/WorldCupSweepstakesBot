@@ -9,3 +9,4 @@ python-dotenv==0.21.0
 python-telegram-bot==13.14
 requests==2.28.1
 SQLAlchemy==1.4.44
+tenacity==8.1.0

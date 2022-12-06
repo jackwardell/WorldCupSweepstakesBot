@@ -10,7 +10,7 @@ from pydantic import BaseSettings
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 WORLD_CUP_START_DATE = "2022-11-20"
-WORLD_CUP_END_DATE = "2022-12-18x"
+WORLD_CUP_END_DATE = "2022-12-18"
 
 
 def get_env_file() -> Path:

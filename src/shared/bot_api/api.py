@@ -179,8 +179,8 @@ class BotApi:
                 fixture.away_goals_halftime = football_fixture.away_goals_halftime
                 fixture.home_goals_fulltime = football_fixture.home_goals_fulltime
                 fixture.away_goals_fulltime = football_fixture.away_goals_fulltime
-                fixture.away_goals_extratime = football_fixture.away_goals_extratime
                 fixture.home_goals_extratime = football_fixture.home_goals_extratime
+                fixture.away_goals_extratime = football_fixture.away_goals_extratime
                 fixture.home_goals_penalties = football_fixture.home_goals_penalties
                 fixture.away_goals_penalties = football_fixture.away_goals_penalties
             else:

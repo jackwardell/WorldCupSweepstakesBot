@@ -193,7 +193,16 @@ class Fixture(FixtureSchema):
 
     @property
     def full_time_analysis(self) -> str:
-        return f"The score was {self.home_goals_fulltime}-{self.away_team_goals} in FT"
+        if self.home_goals_extratime is None and self.away_goals_extratime is None:
+            ft_home_goals = self.home_team_goals
+            ft_away_goals = self.away_team_goals
+        else:
+            ft_home_goals = self.home_goals_fulltime
+            ft_away_goals = self.away_goals_fulltime
+        return (
+            f"The score was {self.home_goals_halftime}-{self.away_goals_halftime} "
+            f"by HT and {ft_home_goals}-{ft_away_goals} at FT"
+        )
 
     @property
     def extra_time_analysis(self) -> str:

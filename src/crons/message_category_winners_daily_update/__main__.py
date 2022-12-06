@@ -79,7 +79,7 @@ def main() -> None:
         time.sleep(1)
 
     for team in bot_api.get_non_remaining_teams():
-        telegram_api.send_message(f"{team.emoji_and_name} is still in, suck it {team.participant.telegram_tag} ❌")
+        telegram_api.send_message(f"{team.emoji_and_name} is out, suck it {team.participant.telegram_tag} ❌")
         time.sleep(1)
 
 
